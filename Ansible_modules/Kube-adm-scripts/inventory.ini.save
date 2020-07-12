@@ -1,0 +1,25 @@
+[k8s:children]
+haproxy
+masters
+worker
+ansible
+# Set variables common for all k8shosts
+[k8s:vars]
+ansible_ssh_user=root
+ansible_become=true
+
+[haproxy]
+172.31.4.38
+[masters]
+#172.31.13.46
+172.31.11.106
+#172.31.10.62
+[ansible]
+172.31.12.115
+[leader]
+172.31.11.106
+[member]
+#172.31.11.106
+#172.31.10.62
+[worker]
+172.31.7.20

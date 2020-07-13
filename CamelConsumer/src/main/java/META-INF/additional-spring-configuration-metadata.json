@@ -1,0 +1,9 @@
+{
+	"properties": [
+		{
+			"name": "ascenthr.camel-rabbitmq-uri",
+			"type": "java.lang.String",
+			"description": "Camel Rabbitmq Component server URI"
+		}
+	]
+}

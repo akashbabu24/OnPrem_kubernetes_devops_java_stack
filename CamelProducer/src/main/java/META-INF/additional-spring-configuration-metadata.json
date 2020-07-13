@@ -1,0 +1,14 @@
+{
+	"properties": [
+		{
+			"name": "ascenthr.messages-per-queue",
+			"type": "java.lang.String",
+			"description": "No. of Employees should be sent as part of each Message to Queue"
+		},
+		{
+			"name": "ascenthr.camel-rabbitmq-uri",
+			"type": "java.lang.String",
+			"description": "Camel Rabbitmq Component server URI"
+		}
+	]
+}

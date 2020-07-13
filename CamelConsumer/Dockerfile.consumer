@@ -1,4 +1,4 @@
-FROM alpine-java:base
+FROM openjdk:8-jdk-alpine
 COPY target/camel-consumer-0.0.1-SNAPSHOT.jar /tmp
 ENV SPRING_APPLICATION_JSON= '{ \
 	"spring.datasource.url":"jdbc:postgresql://localhost:5432/ascenthr?currentSchema=ascenthr", \

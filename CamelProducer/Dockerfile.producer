@@ -1,7 +1,7 @@
 FROM openjdk:8-jdk-alpine
 COPY target/camel-producer-0.0.1-SNAPSHOT.jar /tmp
 ENV SPRING_APPLICATION_JSON= '{ \
-  	"ascenthr.messages-per-queue":2, \
+  	"ascenthr.messages-per-queue":1, \
 	"ascenthr.camel-rabbitmq-uri":"rabbitmq://localhost:5672/ascenthr.exchange?queue=employee.queue&username=full_access&password=admin&autoDelete=false" \
   }'
 ENTRYPOINT ["/usr/bin/java"]

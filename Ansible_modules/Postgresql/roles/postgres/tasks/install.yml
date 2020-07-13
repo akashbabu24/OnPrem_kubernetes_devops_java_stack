@@ -3,7 +3,7 @@
     state: present
     pkg: "{{ item.repo }}"
     validate_certs: no
-  when: item.version == {{ postgresql_version }}
+  when: item.version == '{{postgresql_version}}'
   with_items: "{{postgresql_repo_CentOS}}"
 
 - name: "Stage 1: install postgresql packages"

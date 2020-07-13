@@ -1,0 +1,23 @@
+{
+  "groups": [
+    {
+      "name": "ascenthr",
+      "type": "com.ascenthr.camel.producer.config.ConfigProperties",
+      "sourceType": "com.ascenthr.camel.producer.config.ConfigProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "ascenthr.camel-rabbitmq-uri",
+      "type": "java.lang.String",
+      "sourceType": "com.ascenthr.camel.producer.config.ConfigProperties"
+    },
+    {
+      "name": "ascenthr.messages-per-queue",
+      "type": "java.lang.Integer",
+      "sourceType": "com.ascenthr.camel.producer.config.ConfigProperties",
+      "defaultValue": 0
+    }
+  ],
+  "hints": []
+}

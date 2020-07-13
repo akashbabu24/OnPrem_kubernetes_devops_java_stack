@@ -56,11 +56,11 @@ public class UploadController {
 				// send message to camel route to split and transform it to JSON and send resultant JSON to rabbitmq queue
 				template.asyncSendBody(template.getDefaultEndpoint(), message);
 				
-				note = "Uploaded file successfully: " + file.getOriginalFilename() + " request submitted by TENANTID=" + tenantId;
+				note = "Uploaded file successfully - " + file.getOriginalFilename() + ". Request submitted by TENANTID=" + tenantId;
 				LOGGER.info(note);
 				return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(note));
 			} catch (Exception e) {
-				note = "Error occurred while uploading the file: " + file.getOriginalFilename() + " request submitted by TENANTID=" + tenantId;
+				note = "Error occurred while uploading the file - " + file.getOriginalFilename() + ". Request submitted by TENANTID=" + tenantId;
 				LOGGER.error(note);
 				return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(note));
 			}

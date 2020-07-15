@@ -1,0 +1,2 @@
+nfs_share_dir: /nfs/rabbitmq_datastore
+allowed_from_cidr: 172.31.0.0/20

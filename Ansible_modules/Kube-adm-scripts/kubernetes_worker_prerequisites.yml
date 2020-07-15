@@ -1,6 +1,6 @@
 ---
 - name: Generate Hosts File
-  hosts: kube-worker
+  hosts: kube-workers
   become: true
   gather_facts: true
   tasks:

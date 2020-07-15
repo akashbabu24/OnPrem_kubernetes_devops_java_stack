@@ -8,13 +8,13 @@ postgresql_repo_CentOS:
 # PostgreSQL users and roles
 postgresql_admin_user: "postgres"
 postgresql_users:
- - { name: "madan", pass: "madan1234", flags: "LOGIN,SUPERUSER" }
+ - { name: "ascentuser", pass: "ascent123", flags: "LOGIN,SUPERUSER" }
 
 # PostgreSQL databases and settings. Do not remove template, encoding, collate, ctype options from postgresql_database because it most certainly lead to Ansible role inoperability.
 postgresql_encoding: UTF8
 postgresql_locale: en_US.UTF-8
 postgresql_databases:
- - { name: "db1", owner: "postgres", template: "template0", encoding: "{{ postgresql_encoding }}", collate: "{{ postgresql_locale }}", ctype: "{{ postgresql_locale }}" }
+ - { name: "ascentdb", owner: "ascentuser", template: "template0", encoding: "{{ postgresql_encoding }}", collate: "{{ postgresql_locale }}", ctype: "{{ postgresql_locale }}" }
 
 # Settings related to the pg_hba rules
 postgresql_default_unix_auth_method: "trust"

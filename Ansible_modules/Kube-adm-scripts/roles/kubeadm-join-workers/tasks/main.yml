@@ -8,6 +8,6 @@
 
 - name: Run kubeadm join
   shell: "{{ kubeadm_join }}"
-
+  #delegate_to: "{{ groups['kube-masters'][0] }}"
 - pause:
     prompt: "Wait for containers to Pull and install"

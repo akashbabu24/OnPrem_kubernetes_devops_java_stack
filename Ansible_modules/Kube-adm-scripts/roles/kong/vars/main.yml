@@ -1,0 +1,4 @@
+---
+kong_manifests: "$HOME/.kube/kong"
+kong_yml_file: kong-dbless-istio.yml 
+cmd_path: "kubectl"

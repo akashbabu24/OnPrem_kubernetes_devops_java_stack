@@ -23,7 +23,7 @@ spec:
       namespace: rabbitmq
     spec:
       containers:
-      - image: arrun003/camel-consumer:v2
+      - image: arrun003/camel-consumer:v1
         imagePullPolicy: Always
         name: camel-consumer-container
       restartPolicy: Always

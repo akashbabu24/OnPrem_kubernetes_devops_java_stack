@@ -1,0 +1,64 @@
+Using NFS :
+
+1. Create a EC2 machine - (OS - Centos)
+
+2. Install NFS Package
+   yum -y install nfs-utils libnfsidmap
+   systemctl start rpcbind
+   systemctl start nfs-server
+   systemctl start rpc-statd
+   systemctl start nfs-idmapd
+   systemctl enable rpcbind;systemctl enable nfs-server
+
+3. Check nfs-server status
+   systemctl status nfs-server
+
+4. Create NFS Share directory
+   mkdir -p /kube-data
+   chmod -R 777 /kube-data
+   
+5. Modify Configuration file
+   vim /etc/exports
+   # Add following lines
+   /kube-data *(rw,sync,no_subtree_check,no_root_squash,insecure)
+
+6. exportfs -arv
+
+7. showmount -e localhost
+
+NOTE: Make sure you allow "ALL TRAFFIC" from the security-group
+
+Let's check whether NFS server can be mounted in Master and Worker Nodes
+
+1. Install NFS package on client machine (Worker Nodes)
+   yum -y install nfs-utils libnfsidmap
+   systemctl enable rpcbind
+   systemctl start rpcbind
+   systecmtl start rpcbind
+   showmount -e "NFS_SERVER_IP"
+   
+2. Try mounting NFS share
+    mount -t nfs 10.10.0.203:/kube-data /mnt
+    df -kh
+    
+YAML Descriptor :
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod-aws-vol
+  labels:
+    app: front-end
+spec:
+  volumes:
+    - name: nfs-mount
+      nfs: 
+        # URL for the NFS server
+        server: 10.10.0.203 # Change this!
+        path: /kube-data
+  containers:
+    - name: test-container
+      image: nginx:latest
+      volumeMounts:
+        - name: aws-vol
+          mountPath: /var/log/nginx

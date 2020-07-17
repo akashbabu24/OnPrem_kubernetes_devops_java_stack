@@ -3,6 +3,13 @@
   when: installed.changed
   ignore_errors: True
 
+- name: "Stage 2: configure postgresql.conf"
+  template:
+    src: postgresql.conf.j2
+    dest: "/var/lib/pgsql/{{ postgresql_version }}/data/postgresql.conf"
+    owner: "{{ postgresql_admin_user }}"
+    group: "{{ postgresql_admin_user }}"
+    mode: 0640
 
 - name: "Stage 2: configure pg_hba.conf"
   template:

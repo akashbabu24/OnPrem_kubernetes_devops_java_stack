@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kong-db
+  name: kong-test-3
   labels:
-    app: kong-db
+    app: kong-test-3
 spec:
   selector:
     matchLabels:
-      app: kong-db
+      app: kong-test-3
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -18,25 +18,27 @@ spec:
       annotations:
         traffic.sidecar.istio.io/includeInboundPorts: "4242"
       labels:
-        app: kong-db
+        app: kong-test-3
     spec:
       securityContext:
         runAsUser: 1000
       containers:
-      - name: kong-db
+      - name: kong-test-3
         image: kong
         imagePullPolicy: IfNotPresent
         env:
           - name: KONG_PG_HOST
             value: '172.31.3.11'
           - name: KONG_PG_USER
-            value: 'ascent'
+            value: 'ascentuser'
           - name: KONG_PG_PASSWORD
             value: 'ascent123' 
           - name: KONG_DATABASE
             value: 'postgres'
+          - name: KONG_PG_DATABASE
+            value: 'db1'
           - name: KONG_PG_PORT
-            value: 5432
+            value: '5432'
           - name: KONG_LOG_LEVEL
             value: debug
           - name: KONG_ADMIN_ACCESS_LOG
@@ -51,10 +53,12 @@ spec:
             value: 0.0.0.0:8000,0.0.0.0:8443 ssl
           - name: KONG_ADMIN_LISTEN
             value: 0.0.0.0:8001,0.0.0.0:8444 ssl
+          - name: KONG_DECLARATIVE_CONFIG
+            value: /kong/kong.yml
         ports:
         - name: admin-http
           containerPort: 8001
-        - name: admin-http
+        - name: admin-https
           containerPort: 8444
         - name: data-http
           containerPort: 8000
@@ -70,14 +74,21 @@ spec:
             port: 8000
           initialDelaySeconds: 15
           periodSeconds: 20
+        volumeMounts:
+          - name: kongdeclarative
+            mountPath: /kong
+      volumes:
+        - name: kongdeclarative
+          configMap:
+                name: kong-db-config
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: kong-db
+  name: kong-db-service
 spec:
-  #type: NodePort
-  type: LoadBalancer
+  type: NodePort
+  #type: LoadBalancer
   ports:
   - name: kong-admin-http
     port: 8001
@@ -101,16 +112,12 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: kongconfig
+  name: kong-db-config
 data:
   kong.yml: |
     _format_version: "1.1"
     services:
-    - url: "http://mockbin.org/"
+    - url: "http://camel1-svc.default.svc:8085/producer/api/v1/upload/csv"
       routes:
       - paths:
-        - "/mockbin"
-    - url: "http://productpage.default.svc:9080"
-      routes:
-      - paths:
-        - "/"
+        - "/producer/api/v1/upload/csv"

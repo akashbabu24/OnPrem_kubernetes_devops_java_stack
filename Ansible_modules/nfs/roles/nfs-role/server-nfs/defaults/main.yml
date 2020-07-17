@@ -1,0 +1,10 @@
+---
+nfs_exports: []
+#nfs_export_options: 'rw,sync,no_subtree_check'
+
+nfs_export_options: 'rw,sync,no_subtree_check,no_root_squash,insecure'
+nfs_server_state: "started"
+nfs_server_enabled: "yes"
+# If nfs_service_managed is False then we don't restart/start nfs
+nfs_service_managed: True
+nfsd_threads: 32

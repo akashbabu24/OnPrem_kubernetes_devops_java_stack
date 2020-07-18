@@ -42,8 +42,8 @@ spec:
       namespace: rabbitmq
     spec:
       containers:
-      - image: akash-clconsumer
-        imagePullPolicy: IfNotPresent
+      - image: akashbabu24/ascenthr:akash-clproducer
+        imagePullPolicy: Always
         name: camel-producer-container
         ports:
         - containerPort: 8085

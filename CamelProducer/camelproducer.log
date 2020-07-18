@@ -1,19 +1,19 @@
-2020-07-17 INFO  c.a.c.p.CamelProducerApplicationTests - Starting CamelProducerApplicationTests on ip-172-31-4-98.ec2.internal with PID 4354 (started by centos in /home/centos/ascenthr_devops_java_stack/CamelProducer)
-2020-07-17 INFO  c.a.c.p.CamelProducerApplicationTests - No active profile set, falling back to default profiles: default
-2020-07-17 INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.apache.camel.spring.boot.CamelAutoConfiguration' of type [org.apache.camel.spring.boot.CamelAutoConfiguration$$EnhancerBySpringCGLIB$$93f484e3] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
-2020-07-17 INFO  o.a.camel.support.LRUCacheFactory - Detected and using LRUCacheFactory: camel-caffeine-lrucache
-2020-07-17 WARN  o.a.c.i.e.DefaultCamelBeanPostProcessor - No CamelContext defined yet so cannot inject into bean: org.apache.camel.impl.health.DefaultHealthCheckRegistry
-2020-07-17 INFO  o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
-2020-07-17 INFO  o.a.c.i.e.BaseExecutorServiceManager - Using custom DefaultThreadPoolProfile: ThreadPoolProfile[default (true) size:20-20, keepAlive:60 SECONDS, maxQueue:1000, allowCoreThreadTimeOut:true, rejectedPolicy:CallerRuns]
-2020-07-17 INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 2 endpoint(s) beneath base path '/actuator'
-2020-07-17 INFO  o.a.c.s.b.SpringBootRoutesCollector - Loading additional Camel XML routes from: classpath:camel/*.xml
-2020-07-17 INFO  o.a.c.s.b.SpringBootRoutesCollector - Loading additional Camel XML rests from: classpath:camel-rest/*.xml
-2020-07-17 WARN  o.a.c.c.rabbitmq.RabbitMQComponent - The old syntax rabbitmq://hostname:port/exchangeName is deprecated. You should configure the hostname on the component or ConnectionFactory
-2020-07-17 INFO  o.a.c.i.engine.AbstractCamelContext - Apache Camel 3.4.0 (camel-1) is starting
-2020-07-17 INFO  o.a.c.i.engine.AbstractCamelContext - StreamCaching is not in use. If using streams then its recommended to enable stream caching. See more details at http://camel.apache.org/stream-caching.html
-2020-07-17 INFO  o.a.c.i.engine.AbstractCamelContext - Using HealthCheck: camel-spring-boot
-2020-07-17 INFO  o.a.c.c.jackson.JacksonDataFormat - The option autoDiscoverObjectMapper is set to false, Camel won't search in the registry
-2020-07-17 WARN  o.a.c.c.rabbitmq.RabbitMQProducer - Failed to create connection. It will attempt to connect again when publishing a message.
+2020-07-18 INFO  c.a.c.p.CamelProducerApplicationTests - Starting CamelProducerApplicationTests on ip-172-31-4-98.ec2.internal with PID 20061 (started by centos in /home/centos/ascenthr_devops_java_stack/CamelProducer)
+2020-07-18 INFO  c.a.c.p.CamelProducerApplicationTests - No active profile set, falling back to default profiles: default
+2020-07-18 INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.apache.camel.spring.boot.CamelAutoConfiguration' of type [org.apache.camel.spring.boot.CamelAutoConfiguration$$EnhancerBySpringCGLIB$$1beee027] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-07-18 INFO  o.a.camel.support.LRUCacheFactory - Detected and using LRUCacheFactory: camel-caffeine-lrucache
+2020-07-18 WARN  o.a.c.i.e.DefaultCamelBeanPostProcessor - No CamelContext defined yet so cannot inject into bean: org.apache.camel.impl.health.DefaultHealthCheckRegistry
+2020-07-18 INFO  o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+2020-07-18 INFO  o.a.c.i.e.BaseExecutorServiceManager - Using custom DefaultThreadPoolProfile: ThreadPoolProfile[default (true) size:20-20, keepAlive:60 SECONDS, maxQueue:1000, allowCoreThreadTimeOut:true, rejectedPolicy:CallerRuns]
+2020-07-18 INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 2 endpoint(s) beneath base path '/actuator'
+2020-07-18 INFO  o.a.c.s.b.SpringBootRoutesCollector - Loading additional Camel XML routes from: classpath:camel/*.xml
+2020-07-18 INFO  o.a.c.s.b.SpringBootRoutesCollector - Loading additional Camel XML rests from: classpath:camel-rest/*.xml
+2020-07-18 WARN  o.a.c.c.rabbitmq.RabbitMQComponent - The old syntax rabbitmq://hostname:port/exchangeName is deprecated. You should configure the hostname on the component or ConnectionFactory
+2020-07-18 INFO  o.a.c.i.engine.AbstractCamelContext - Apache Camel 3.4.0 (camel-1) is starting
+2020-07-18 INFO  o.a.c.i.engine.AbstractCamelContext - StreamCaching is not in use. If using streams then its recommended to enable stream caching. See more details at http://camel.apache.org/stream-caching.html
+2020-07-18 INFO  o.a.c.i.engine.AbstractCamelContext - Using HealthCheck: camel-spring-boot
+2020-07-18 INFO  o.a.c.c.jackson.JacksonDataFormat - The option autoDiscoverObjectMapper is set to false, Camel won't search in the registry
+2020-07-18 WARN  o.a.c.c.rabbitmq.RabbitMQProducer - Failed to create connection. It will attempt to connect again when publishing a message.
 java.net.UnknownHostException: rabbitmq.rabbitmq.svc.cluster.local: Name or service not known
 	at java.base/java.net.Inet6AddressImpl.lookupAllHostAddr(Native Method)
 	at java.base/java.net.InetAddress$PlatformNameService.lookupAllHostAddr(InetAddress.java:929)
@@ -134,14 +134,14 @@ java.net.UnknownHostException: rabbitmq.rabbitmq.svc.cluster.local: Name or serv
 	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:345)
 	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:126)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:418)
-2020-07-17 INFO  o.a.c.i.e.InternalRouteStartupManager - Route: rabbitEmployeeRoute started and consuming from: direct://rabbitEmployeePoint
-2020-07-17 INFO  o.a.c.i.engine.AbstractCamelContext - Total 1 routes, of which 1 are started
-2020-07-17 INFO  o.a.c.i.engine.AbstractCamelContext - Apache Camel 3.4.0 (camel-1) started in 0.061 seconds
-2020-07-17 INFO  c.a.c.p.CamelProducerApplicationTests - Started CamelProducerApplicationTests in 6.277 seconds (JVM running for 7.585)
-2020-07-17 INFO  o.a.c.i.engine.AbstractCamelContext - Apache Camel 3.4.0 (camel-1) is shutting down
-2020-07-17 INFO  o.a.c.i.e.DefaultShutdownStrategy - Starting to graceful shutdown 1 routes (timeout 45 seconds)
-2020-07-17 INFO  o.a.c.i.e.DefaultShutdownStrategy - Route: rabbitEmployeeRoute shutdown complete, was consuming from: direct://rabbitEmployeePoint
-2020-07-17 INFO  o.a.c.i.e.DefaultShutdownStrategy - Graceful shutdown of 1 routes completed in 0 seconds
-2020-07-17 INFO  o.a.c.i.engine.AbstractCamelContext - Apache Camel 3.4.0 (camel-1) uptime 0.471 seconds
-2020-07-17 INFO  o.a.c.i.engine.AbstractCamelContext - Apache Camel 3.4.0 (camel-1) is shutdown in 0.023 seconds
-2020-07-17 INFO  o.s.s.c.ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
+2020-07-18 INFO  o.a.c.i.e.InternalRouteStartupManager - Route: rabbitEmployeeRoute started and consuming from: direct://rabbitEmployeePoint
+2020-07-18 INFO  o.a.c.i.engine.AbstractCamelContext - Total 1 routes, of which 1 are started
+2020-07-18 INFO  o.a.c.i.engine.AbstractCamelContext - Apache Camel 3.4.0 (camel-1) started in 0.075 seconds
+2020-07-18 INFO  c.a.c.p.CamelProducerApplicationTests - Started CamelProducerApplicationTests in 6.013 seconds (JVM running for 7.099)
+2020-07-18 INFO  o.a.c.i.engine.AbstractCamelContext - Apache Camel 3.4.0 (camel-1) is shutting down
+2020-07-18 INFO  o.a.c.i.e.DefaultShutdownStrategy - Starting to graceful shutdown 1 routes (timeout 45 seconds)
+2020-07-18 INFO  o.a.c.i.e.DefaultShutdownStrategy - Route: rabbitEmployeeRoute shutdown complete, was consuming from: direct://rabbitEmployeePoint
+2020-07-18 INFO  o.a.c.i.e.DefaultShutdownStrategy - Graceful shutdown of 1 routes completed in 0 seconds
+2020-07-18 INFO  o.a.c.i.engine.AbstractCamelContext - Apache Camel 3.4.0 (camel-1) uptime 0.550 seconds
+2020-07-18 INFO  o.a.c.i.engine.AbstractCamelContext - Apache Camel 3.4.0 (camel-1) is shutdown in 0.018 seconds
+2020-07-18 INFO  o.s.s.c.ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'

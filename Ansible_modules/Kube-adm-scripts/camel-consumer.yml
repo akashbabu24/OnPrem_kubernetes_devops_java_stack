@@ -6,4 +6,4 @@
    - name: consumer-app
      role: camel-apps
      vars:
-        application_yml_file: "consumer.yml"
+        application_yml_file: "deployment-consumer.yml"

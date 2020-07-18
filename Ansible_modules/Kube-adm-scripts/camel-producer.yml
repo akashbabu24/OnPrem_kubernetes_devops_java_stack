@@ -6,4 +6,4 @@
    - name: producer-app
      role: camel-apps
      vars:
-        application_yml_file: "producer.yml"
+        application_yml_file: "deployment-producer.yml"

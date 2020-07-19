@@ -25,7 +25,7 @@ postgresql_default_ipv6_auth_method: "md5"
 postgresql_pg_hba_default:
  - { type: local, database: all, role: "{{ postgresql_admin_user }}", address: "", method: "{{ postgresql_default_unix_auth_method }}", comment: '"local" is for Unix domain socket connections only' }
  - { type: host, database: all, role: all, address: "0.0.0.0/0", method: "{{ postgresql_default_ipv4_auth_method }}", comment: 'IPv4 local connections:' }
- - { type: host, database: all, role: all, address: "::0", method: "{{ postgresql_default_ipv6_auth_method }}", comment: 'IPv6 local connections:' }
+ - { type: host, database: all, role: all, address: "::0/128", method: "{{ postgresql_default_ipv6_auth_method }}", comment: 'IPv6 local connections:' }
 
 # Specify custom rules for pg_hba.conf. Specify here all necessary pg_hba rules.
 postgresql_pg_hba_custom:

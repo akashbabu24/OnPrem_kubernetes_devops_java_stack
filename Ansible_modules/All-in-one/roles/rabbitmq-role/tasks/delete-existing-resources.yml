@@ -1,0 +1,27 @@
+- name: To check if rabbitmq files already exists
+  stat:
+    path: "{{ application_manifests }}/stateful-set.yml"
+  register: rabbitmq_manifests_exists
+
+
+#command to get thw shutdown period period for rabbitmq pods
+#grace=$(sudo kubectl get pods -n rabbitmq -l app=rabbitmq --no-headers=true | awk '/rabbitmq-/{print $1}' | xargs sudo kubectl get pods -n rabbitmq --template '{{.spec.terminationGracePeriodSeconds}}')
+#        #sudo kubectl get pods rabbitmq-0 -n rabbitmq --template "\{\{.spec.terminationGracePeriodSeconds\}\}"
+#        kubectl delete statefulset -l app=rabbitmq -n rabbitmq
+- name: delete existing resources
+  shell: |
+        kubectl delete -f "{{ application_manifests }}/stateful-set.yml"
+        sleep 10
+        kubectl delete -f "{{ application_manifests }}/service.yml"
+        kubectl delete -f "{{ application_manifests }}/pvc.yml"
+        kubectl delete -f "{{ application_manifests }}/pv.yml"
+        kubectl delete -f "{{ application_manifests }}/creating-rbac.yml"
+  when:
+    - rabbitmq_manifests_exists.stat.exists
+  ignore_errors: true
+
+- name: delete existing resources
+  #shell: rm "{{ application_manifests }}/*.yml"
+  shell: rm -r "{{ application_manifests }}"
+  when:
+    - rabbitmq_manifests_exists.stat.exists

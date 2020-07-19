@@ -1,0 +1,10 @@
+---
+- hosts: kube-leader 
+  gather_facts: true
+  become: true
+  roles:
+   - name: consumer-app
+     role: camel-apps
+     vars:
+        application_yml_file: "deployment-consumer.yml"
+        postgres_ip: "{{ hostvars[groups['dbserver'][0]].ansible_eth0.ipv4.address }}"       

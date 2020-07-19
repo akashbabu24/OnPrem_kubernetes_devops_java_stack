@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: camel-consumer-deployment
+  namespace: rabbitmq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: back-end-consumer
+      type: camel-consumer-jar
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: back-end-consumer
+        type: camel-consumer-jar
+      name: camel-consumer
+      namespace: rabbitmq
+    spec:
+      containers:
+      - image: akashbabu24/ascenthr:akash-clconsumer
+        imagePullPolicy: Always
+        name: camel-consumer-container
+        env:
+          - name: SPRING_APPLICATION_JSON
+            value: '{
+                "spring.datasource.url":"jdbc:postgresql://{{ postgres_ip }}:5432/ascentdb?currentSchema=ascentschema",
+                "spring.datasource.username":"ascentuser",
+                "spring.datasource.password":"ascent123",
+                "ascenthr.camel-rabbitmq-uri":"rabbitmq://rabbitmq.rabbitmq.svc.cluster.local:5672/example-exchange?vhost=example-vhost&queue=example-queue&username=admin&password=nimda&autoDelete=false&autoAck=true"
+                }'
+      restartPolicy: Always
+
+      initContainers:
+        - name: waiting-for-rabbitmq
+          image: busybox:1.28
+          command: ['sh', '-c', "until nslookup rabbitmq.rabbitmq.svc.cluster.local; do echo waiting for rabbitmq; sleep 2; done"]
+        - name: waiting-for-producer
+          image: busybox:1.28
+          command: ['sh', '-c', "until nslookup camel-producer.rabbitmq.svc.cluster.local; do echo waiting for Producer; sleep 2; done"]

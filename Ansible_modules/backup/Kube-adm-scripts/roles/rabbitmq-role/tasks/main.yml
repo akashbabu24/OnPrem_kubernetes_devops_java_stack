@@ -1,0 +1,32 @@
+- include_tasks: delete-existing-resources.yml
+
+- name: Create rabbitmq namespace
+  shell: "{{ cmd_path }} create namespace rabbitmq"
+  ignore_errors: true
+
+- name: To check if application_manifests folder exists
+  stat:
+    path: "{{ application_manifests }}"
+  register: application_manifests_exists
+
+- name: Create Application manifests folder
+  shell: "mkdir {{ application_manifests }}"
+  when:
+     - not application_manifests_exists.stat.exists 
+
+- name: Copy application YAML file to K8 master
+  copy:
+    src: "{{ item }}"
+    dest: "{{ application_manifests }}/{{ item }}"
+    mode: 0755
+  with_items:
+        - creating-rbac.yml
+        - pv.yml
+        - pvc.yml
+        - stateful-set.yml
+        - service.yml
+
+- name: Deploy Application from kubernetes file
+  shell: "{{ cmd_path }} create -f {{ application_manifests }}/creating-rbac.yml -f {{ application_manifests }}/pv.yml -f {{ application_manifests }}/pvc.yml -f {{ application_manifests }}/stateful-set.yml -f {{ application_manifests }}/service.yml"
+  #with_items: ['creating-rbac.yml', 'pv.yml', 'pvc.yml', 'stateful-set.yml', 'service.yml']
+  ignore_errors: true

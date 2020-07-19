@@ -1,4 +1,0 @@
-- hosts: kube-workers
-  become: yes
-  roles:
-    - kubeadm-join-workers

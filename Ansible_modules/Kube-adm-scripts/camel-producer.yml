@@ -1,0 +1,9 @@
+---
+- hosts: kube-leader 
+  gather_facts: true
+  become: true
+  roles:
+   - name: producer-app
+     role: camel-apps
+     vars:
+        application_yml_file: "deployment-producer.yml"

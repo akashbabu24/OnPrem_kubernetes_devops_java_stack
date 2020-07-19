@@ -1,0 +1,47 @@
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: test-rabbitmq
+  name: rabbitmq
+  labels:
+    app: rabbitmq
+    type: LoadBalancer  
+spec:
+  type: NodePort
+  ports:
+   - name: http
+     protocol: TCP
+     port: 15672
+     targetPort: 15672
+     nodePort: 31672
+   - name: amqp
+     protocol: TCP
+     port: 5672
+     targetPort: 5672
+     nodePort: 30672
+  selector:
+    app: rabbitmq
+---
+kind: Service 
+apiVersion: v1
+metadata:
+  namespace: test-rabbitmq
+  name: rabbitmq-lb
+  labels:
+    app: rabbitmq
+spec:
+  # Headless service to give the StatefulSet a DNS which is known in the cluster (hostname-#.app.namespace.svc.cluster.local, )
+  # in our case - rabbitmq-#.rabbitmq.test-rabbitmq.svc.cluster.local	
+  clusterIP: None
+  ports:
+   - name: http
+     protocol: TCP
+     port: 15672
+     targetPort: 15672
+   - name: amqp
+     protocol: TCP
+     port: 5672
+     targetPort: 5672
+  selector:
+    app: rabbitmq
+

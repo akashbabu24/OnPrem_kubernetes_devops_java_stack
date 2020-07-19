@@ -1,0 +1,21 @@
+
+- name: To check if application_manifests folder exists
+  stat:
+    path: "{{ application_manifests }}"
+  register: application_manifests_exists
+
+- name: Create Application manifests folder
+  shell: "mkdir {{ application_manifests }}"
+  when:
+     - not application_manifests_exists.stat.exists 
+
+- name: Copy application YAML file to K8 master
+  copy:
+    src: "{{ application_yml_file }}"
+    dest: "{{ application_manifests }}/{{ application_yml_file }}"
+    mode: 0755
+
+- name: Deploy Application from kubernetes file
+  shell: "{{ cmd_path }} create -f {{ application_manifests }}/{{ application_yml_file }}"
+  ignore_errors: true
+

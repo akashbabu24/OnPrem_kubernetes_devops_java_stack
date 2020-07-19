@@ -1,0 +1,11 @@
+FROM arrun003/centos7java8:v1
+
+LABEL maintainer "Arun Baskaran"
+
+COPY target/camel-producer-0.0.1-SNAPSHOT.jar /opt/
+
+WORKDIR /opt/
+
+EXPOSE 8085
+
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "camel-producer-0.0.1-SNAPSHOT.jar"]

@@ -1,0 +1,13 @@
+---
+- name: restart nfs-config on EL7
+  service: 
+     name: nfs-config 
+     state: restarted
+  when: nfs_service_managed and ansible_distribution_major_version == "7" and ansible_os_family == "RedHat"
+
+- name: restart nfs-server
+  service: 
+     name: "{{ nfs_server_daemon }}"
+     state: restarted
+  when: nfs_service_managed
+

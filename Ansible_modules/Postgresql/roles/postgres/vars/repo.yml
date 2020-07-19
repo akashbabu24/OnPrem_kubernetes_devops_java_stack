@@ -29,4 +29,5 @@ postgresql_pg_hba_default:
 
 # Specify custom rules for pg_hba.conf. Specify here all necessary pg_hba rules.
 postgresql_pg_hba_custom:
- - { type: host, database: replication, role: "{{ postgresql_admin_user }}", address: "127.0.0.1/32", method: "{{ postgresql_default_ipv4_auth_method }}", comment: '' }
+ - { type: host, database: all, role: all, address: "0.0.0.0/0", method: "{{ postgresql_default_ipv4_auth_method }}", comment: 'Allow All Connectios' }
+ - { type: host, database: all, role: all, address: "172.31.0.0/20", method: "{{ postgresql_default_ipv4_auth_method }}", comment: 'Allow All Connectios' }

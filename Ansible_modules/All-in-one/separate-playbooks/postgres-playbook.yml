@@ -1,0 +1,8 @@
+---
+
+- hosts: dbserver
+  gather_facts: yes
+  become: yes
+  #remote_user: root
+  roles: 
+   - postgres

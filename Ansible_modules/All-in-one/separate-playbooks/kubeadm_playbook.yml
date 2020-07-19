@@ -1,0 +1,15 @@
+- name: Configure Kube-adm master
+  hosts: kube-masters
+  become: true
+  gather_facts: true
+  vars:
+    nodeip: var=ansible_eth0.ipv4.address
+  roles:
+    - kubeadm-master-role
+
+- name: Configure Kube-adm worker
+  hosts: kube-workers
+  become: true
+  gather_facts: true
+  roles:
+    - kubeadm-worker-role

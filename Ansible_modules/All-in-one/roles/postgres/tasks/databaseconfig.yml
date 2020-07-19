@@ -1,0 +1,17 @@
+- name: Place query sql file
+  template:
+    src: query.sql.j2
+    dest: /etc/query.sql
+    owner: postgres
+    group: postgres
+    mode: 0755
+  register: sql_file_path
+
+- name: run custom sql script
+  command: "psql ascentdb -f {{ sql_file_path.dest }}"
+  become_user: postgres
+  register: sql_response_file
+
+- name: debug response
+  debug:
+    var: sql_response_file

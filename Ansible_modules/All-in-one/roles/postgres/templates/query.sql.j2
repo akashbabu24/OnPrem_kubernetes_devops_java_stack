@@ -1,0 +1,12 @@
+CREATE SCHEMA ascentschema;
+
+ALTER SCHEMA ascentschema OWNER TO ascentuser;
+
+CREATE TABLE ascentschema.queue_message (
+	id SERIAL PRIMARY KEY,
+    tenant_id text NOT NULL,
+    employee_json text NOT NULL,
+	created_date timestamp without time zone DEFAULT (to_char(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS'::text))::timestamp without time zone
+);
+
+ALTER TABLE ascentschema.queue_message OWNER to ascentuser;

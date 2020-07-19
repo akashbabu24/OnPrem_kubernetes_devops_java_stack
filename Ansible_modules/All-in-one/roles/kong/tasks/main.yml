@@ -1,0 +1,21 @@
+
+- name: To check if kong_manifests folder exists
+  stat:
+    path: "{{ kong_manifests }}"
+  register: kong_manifests_exists
+
+- name: Create Kong manifests folder
+  shell: "mkdir {{ kong_manifests }}"
+  when:
+     - not kong_manifests_exists.stat.exists 
+
+- name: Copy kong YAML file to K8 master
+  copy:
+    src: "{{ kong_yml_file }}"
+    dest: "{{ kong_manifests }}/{{ kong_yml_file }}"
+    mode: 0755
+
+- name: Deploy Kong from kubernetes file
+  shell: "{{ cmd_path }} create -f {{ kong_manifests }}/{{ kong_yml_file }}"
+  ignore_errors: true
+

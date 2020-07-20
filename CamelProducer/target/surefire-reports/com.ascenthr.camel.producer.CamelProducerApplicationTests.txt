@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.ascenthr.camel.producer.CamelProducerApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.1 s - in com.ascenthr.camel.producer.CamelProducerApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 24.639 s - in com.ascenthr.camel.producer.CamelProducerApplicationTests

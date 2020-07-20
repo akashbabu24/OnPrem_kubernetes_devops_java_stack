@@ -6,6 +6,7 @@ import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,6 +20,10 @@ import com.ascenthr.camel.producer.helper.CSVHelper;
 import com.ascenthr.camel.producer.message.QueueMessage;
 import com.ascenthr.camel.producer.message.ResponseMessage;
 import com.ascenthr.camel.producer.model.Employee;
+import com.ascenthr.camel.producer.service.MetricsService;
+
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 
 /**
  * Rest Controller to handle file upload and process it. 
@@ -36,13 +41,17 @@ public class UploadController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UploadController.class);
 	
-	@Produce(uri = "direct:rabbitEmployeePoint")
+	@Produce(value = "direct:rabbitEmployeePoint")
 	private ProducerTemplate template;
+	
+	@Autowired
+	private MetricsService metricsService;
 	
 	@PostMapping("/csv")
 	public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("tenantId") String tenantId, @RequestParam("file") MultipartFile file) {
 		
 		LOGGER.info("Received Employee CSV upload request submitted by TENANTID=" + tenantId);
+		metricsService.incrementUploadEmployeesRequestCounter();
 		
 		String note;
 		if (CSVHelper.hasCSVFormat(file)) {

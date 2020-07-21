@@ -49,6 +49,7 @@
   vars:
      postgresql_allowed_cidr: "{{ allowed_from_cidr }}"
 
+
 - name: Configure Kube-adm worker
   hosts: kube-masters
   become: true

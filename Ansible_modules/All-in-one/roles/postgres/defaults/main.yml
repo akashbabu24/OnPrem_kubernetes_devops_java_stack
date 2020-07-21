@@ -1,6 +1,8 @@
 postgresql_version: 12
 postgresql_contrib: yes
 
+postgresql_allowed_cidr:
+
 postgresql_repo_CentOS:
   - { version: "12", repo: "https://yum.postgresql.org/12/redhat/rhel-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm" }
 
@@ -24,5 +26,4 @@ postgresql_pg_hba_default:
 
 postgresql_pg_hba_custom:
  #- { type: host, database: all, role: all, address: "0.0.0.0/0", method: "{{ postgresql_default_ipv4_auth_method }}", comment: 'Allow All Connectios' }
- - { type: host, database: all, role: all, address: "172.31.0.0/20", method: "{{ postgresql_default_ipv4_auth_method }}", comment: 'Allow All Connectios' }
- - { type: host, database: all, role: all, address: "221.31.122.123/32", method: "{{ postgresql_default_ipv4_auth_method }}", comment: 'Allow All Connectios' }
+ - { type: host, database: all, role: all, address: "{{ postgresql_allowed_cidr }}",  method: "{{ postgresql_default_ipv4_auth_method }}", comment: 'Allow All Connectios' }

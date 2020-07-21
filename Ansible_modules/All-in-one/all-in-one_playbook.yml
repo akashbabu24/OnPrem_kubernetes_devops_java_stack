@@ -46,7 +46,8 @@
   become: yes
   roles:
        - postgres
-
+  vars:
+     postgresql_allowed_cidr: "{{ allowed_from_cidr }}"
 
 - name: Configure Kube-adm worker
   hosts: kube-masters

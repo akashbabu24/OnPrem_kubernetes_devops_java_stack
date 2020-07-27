@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+   name: canary-kube-pv0
+spec:
+  storageClassName: canary-manual
+  persistentVolumeReclaimPolicy: Recycle
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 10Gi
+  nfs:
+   server: 192.168.0.36
+   path: /kube_data
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+   name: canary-kube-pv1
+spec:
+  storageClassName: canary-manual
+  persistentVolumeReclaimPolicy: Recycle
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 10Gi
+  nfs:
+   server: 192.168.0.36
+   path: /kube_data
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+   name: canary-kube-pv2
+spec:
+  storageClassName: canary-manual
+  persistentVolumeReclaimPolicy: Recycle
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 10Gi
+  nfs:
+   server: 192.168.0.36
+   path: /kube_data

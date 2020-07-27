@@ -1,0 +1,34 @@
+Create RBAC :
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: rabbitmq-sa
+  namespace: rabbitmq
+  
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: endpoint-reader
+  namespace: rabbitmq 
+rules:
+- apiGroups: [""]
+  resources: ["endpoints"]
+  verbs: ["get"]
+  
+
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: endpoint-reader
+  namespace: rabbitmq
+subjects:
+- kind: ServiceAccount
+  name: rabbitmq-sa
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: endpoint-reader

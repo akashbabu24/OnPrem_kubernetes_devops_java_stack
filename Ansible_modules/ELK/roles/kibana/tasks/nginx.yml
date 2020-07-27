@@ -1,0 +1,29 @@
+---
+
+- name: Install nginx, httpd-tools, httplib2
+  yum:
+    name: [nginx, httpd-tools, python-httplib2]
+  
+# SELinux boolean for nginx
+- name: Apply SELinux boolean httpd_can_network_connect
+  seboolean: name=httpd_can_network_connect state=yes persistent=yes
+
+  
+# deploy kibana.conf with FQDN
+- name: Setup nginx reverse proxy for kibana
+  template:
+    src=kibana.conf.j2
+    dest=/etc/nginx/conf.d/kibana.conf
+    owner=root
+    group=root
+    mode=0644
+  
+- name: "Enabling the Nginx Service"
+  systemd:
+    name: nginx
+    enabled: yes
+
+- name: "Starting the Nginx Service"
+  systemd:
+    name: nginx
+    state: restarted

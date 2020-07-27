@@ -1,0 +1,14 @@
+- name: Check kibana users
+  stat: path=/etc/htpasswd.users
+  ignore_errors: true
+  register: kibana_user_pwfile_exists
+
+- name: Create user
+  htpasswd:
+    path: /etc/htpasswd.users
+    name: "{{kibana_user}}"
+    password: "{{kibana_user}}"
+    owner: root
+    group: nginx
+    mode: 0640
+  when: kibana_user_pwfile_exists != 0

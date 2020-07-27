@@ -1,0 +1,46 @@
+---
+
+- name: Configure Logstash yum repo
+  yum_repository:
+    name: Logstash
+    description: Logstash YUM repo
+    file: Logstash
+    baseurl: "{{ es_repo_base_url }}"
+    gpgkey:  "{{ es_repo_gpgkey }}"
+    gpgcheck: 1
+    enabled: yes 
+
+- name: Install Logstash
+  yum:
+    name: logstash
+    state: present
+
+- name: Create Logstash Pipeline File
+  file:
+      path: /etc/logstash/conf.d/main.conf
+      state: touch
+
+- name: Add Logstash Pipeline Configuration
+  blockinfile:
+      path: /etc/logstash/conf.d/main.conf
+      marker: ""
+      block: |
+        input {
+          beats {
+            port => 5044
+          }
+        }
+        output {
+          elasticsearch { hosts => ["{{ es_url }}"]
+          }
+        }
+
+- name: "Enabling the Logstash Service"
+  systemd:
+    name: logstash
+    enabled: yes
+  
+- name: "Starting the Logstash Service"
+  systemd:
+    name: logstash
+    state: restarted

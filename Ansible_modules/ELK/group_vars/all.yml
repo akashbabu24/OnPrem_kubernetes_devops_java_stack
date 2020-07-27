@@ -1,0 +1,18 @@
+#General Settings
+epel_repo: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+es_repo_base_url: https://artifacts.elastic.co/packages/7.x/yum
+es_repo_gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+# ES Setting 
+es_local_port: 9200
+es_listen_external: false
+es_listen_address: "0.0.0.0" 
+
+#Kibana Settings
+es_url: "http://localhost:9200"
+kibana_user: admin
+kibana_password: admin
+www_kibana_port: 80
+nginx_server_domain: "54.169.15.55"
+
+#Logstash Setting

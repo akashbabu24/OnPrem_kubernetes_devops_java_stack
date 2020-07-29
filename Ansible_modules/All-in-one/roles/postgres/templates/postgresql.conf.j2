@@ -97,7 +97,12 @@ max_connections = 100                   # (change requires restart)
 
 # - SSL -
 
-#ssl = off
+{% if postgresql_enable_SSL %}
+ssl = on
+{% endif %}
+{% if not postgresql_enable_SSL %}
+ssl = off
+{% endif %}
 #ssl_ca_file = ''
 #ssl_cert_file = 'server.crt'
 #ssl_crl_file = ''

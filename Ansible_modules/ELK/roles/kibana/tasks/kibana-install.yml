@@ -1,0 +1,39 @@
+---
+
+- name: Configure Kibana yum repo
+  yum_repository:
+    name: Kibana
+    description: Kibana YUM repo
+    file: kibana
+    baseurl: "{{ es_repo_base_url }}"
+    gpgkey:  "{{ es_repo_gpgkey }}"
+    gpgcheck: 1
+    enabled: yes
+
+
+- name: Install kibana
+  yum:
+    name: [kibana, unzip, python-passlib]
+    state: present
+
+- name: Update Kibana Config (IP Address)
+  lineinfile:
+    destfile: /etc/kibana/kibana.yml
+    regexp: 'server.host'
+    line: 'server.host: "localhost"'
+
+- name: Update Kibana Config (Kibana URL)
+  lineinfile:
+    destfile: /etc/kibana/kibana.yml
+    regexp: 'elasticsearch.hosts'
+    line: 'elasticsearch.hosts: ["{{ es_url }}"]'
+
+- name: "Enabling the Kibana Service"
+  systemd:
+    name: kibana
+    enabled: yes
+
+- name: "Starting the Kibana Service"
+  systemd:
+    name: kibana
+    state: restarted

@@ -1,0 +1,46 @@
+---
+- hosts: all
+  name: grafana installation
+  tasks:
+    - name: Ensure Docker is installed if not install
+      yum:
+       name: docker
+       state: latest
+    - name: Start docker service, if not start
+      service:
+        name: docker
+        enabled: yes
+        state: started
+    - name: Ensure python-Docker package is installed, if not install
+      yum:
+       name: python-docker
+       state: latest
+    - name: Grafana container creation
+      docker_container:
+        name: grafana
+        image: grafana/grafana
+        state: started
+        detach: yes
+        ports:
+           - "3000:3000"
+    - name: Copying Service file to /etc/systemd/system path to run Grafana as a systemd service
+      copy:
+        src: /tmp/grafana.service
+        dest: /etc/systemd/system
+        remote_src: no
+        owner: root
+        mode: 0777
+    - name: Enable grafana systemd service and ensure it is running
+      service:
+        name: grafana.service
+        enabled: yes
+        state: started
+    - name: Check if grafana is accessible
+      uri:
+         url: http://localhost:3000
+         method: GET
+         status_code: 200
+
+        
+
+

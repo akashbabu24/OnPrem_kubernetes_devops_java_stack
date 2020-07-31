@@ -1,0 +1,40 @@
+---
+
+- name: Configure ElasticSearch yum repo
+  yum_repository:
+    name: Elasticsearch
+    description: Elasticsearch YUM repo
+    file: elasticsearch
+    baseurl: "{{ es_repo_base_url }}"
+    gpgkey:  "{{ es_repo_gpgkey }}"
+    gpgcheck: 1
+    enabled: yes 
+
+- name: Install elasticsearch
+  yum:
+    name: elasticsearch
+    state: present
+
+- name: Update Elastic Config Access
+  lineinfile:
+    destfile: /etc/elasticsearch/elasticsearch.yml
+    regexp: 'network.host'
+    line: '{% if es_listen_external %}network.host: {{ es_listen_address }}{% endif %}{% if not es_listen_external %}network.host: localhost {% endif %}'
+
+- name: Updating Elastic Config (Port Number)
+  become: yes
+  lineinfile:
+    destfile: /etc/elasticsearch/elasticsearch.yml
+    regexp: 'http.port'
+    line: 'http.port: {{ es_local_port }}'
+
+
+- name: "Enabling the ES Service"
+  systemd:
+    name: elasticsearch
+    enabled: yes
+
+- name: "Starting the ES Service"
+  systemd:
+    name: elasticsearch
+    state: restarted

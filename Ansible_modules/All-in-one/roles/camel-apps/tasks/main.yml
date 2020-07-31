@@ -26,6 +26,6 @@
   when: application_yml_file == "deployment-consumer.yml"
   
 - name: Deploy Application from kubernetes file
-  shell: "{{ cmd_path }} create -f {{ application_manifests }}/{{ application_yml_file }}"
+  shell: "{{ cmd_path }} apply -f {{ application_manifests }}/{{ application_yml_file }}"
   ignore_errors: true
 

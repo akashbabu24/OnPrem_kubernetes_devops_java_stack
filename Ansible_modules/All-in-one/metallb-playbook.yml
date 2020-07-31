@@ -1,0 +1,9 @@
+---
+- hosts: kube-masters 
+  gather_facts: true
+  become: true
+  roles:
+   - name: metallb-role
+     role: metallb
+     vars:
+        metallb_ip_range: "{{ metallb_ip_range_list }}"

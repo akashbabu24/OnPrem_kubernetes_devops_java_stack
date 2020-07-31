@@ -15,7 +15,8 @@
 - name: Check if any Kiali Secret present
   shell: kubectl get secret kiali -n istio-system
   register: secretexist
-  
+  ignore_errors: true  
+ 
 - name: Create Kiali Secret
   shell: "echo \"{{ secret | to_yaml }}\" | {{cmd_path}} create -f - "
   when: secretexist.rc != 0
@@ -38,6 +39,6 @@
     mode: 0755
 
 - name: Deploy Istio from kubernetes file
-  shell: "{{ cmd_path }} create -f {{ istio_manifests }}/istio.yml"
+  shell: "{{ cmd_path }} apply -f {{ istio_manifests }}/istio.yml"
   ignore_errors: true
 

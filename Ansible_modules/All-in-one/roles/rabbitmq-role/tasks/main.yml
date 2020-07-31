@@ -1,7 +1,15 @@
-- include_tasks: delete-existing-resources.yml
+#- include_tasks: delete-existing-resources.yml
+
+- name: Check if namespace for RabbitMQ exists
+  shell: "{{ cmd_path }} get namespace/{{ ns_name }}"
+  ignore_errors: true
+  register: if_namespace_present
 
 - name: Create rabbitmq namespace
-  shell: "{{ cmd_path }} create namespace rabbitmq"
+  shell: "{{ cmd_path }} create namespace {{ ns_name }}"
+  when:
+    - if_namespace_present.stderr != ""
+    - if_namespace_present.stderr.find("NotFound") != -1
   ignore_errors: true
 
 - name: To check if application_manifests folder exists
@@ -27,6 +35,6 @@
         - service.yml
 
 - name: Deploy Application from kubernetes file
-  shell: "{{ cmd_path }} create -f {{ application_manifests }}/creating-rbac.yml -f {{ application_manifests }}/pv.yml -f {{ application_manifests }}/pvc.yml -f {{ application_manifests }}/stateful-set.yml -f {{ application_manifests }}/service.yml"
+  shell: "{{ cmd_path }} apply -f {{ application_manifests }}/creating-rbac.yml -f {{ application_manifests }}/pv.yml -f {{ application_manifests }}/pvc.yml -f {{ application_manifests }}/stateful-set.yml -f {{ application_manifests }}/service.yml"
   #with_items: ['creating-rbac.yml', 'pv.yml', 'pvc.yml', 'stateful-set.yml', 'service.yml']
   ignore_errors: true

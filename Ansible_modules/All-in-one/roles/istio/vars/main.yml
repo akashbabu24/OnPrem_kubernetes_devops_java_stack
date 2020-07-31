@@ -1,7 +1,7 @@
 ---
 minimum_cluster_version: 1.9.0
 
-istio_manifests: "$HOME/istio"
+istio_manifests: "$HOME/.kube/istio"
 
 istio_namespace: istio-system
 

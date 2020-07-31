@@ -27,7 +27,7 @@
             group: root
             mode: "0775"
             allow_from:
-              - "{{ allowed_from_cidr }}"
+              - "{{ gvars_postgres_nfs_allowed_from_cidr }}"
 - hosts: nfs-client
   gather_facts: yes
   become: yes
@@ -47,7 +47,7 @@
   roles:
        - postgres
   vars:
-     postgresql_allowed_cidr: "{{ allowed_from_cidr }}"
+     postgresql_allowed_cidr: "{{ gvars_postgres_nfs_allowed_from_cidr }}"
 
 
 - name: Configure Kube-adm worker
@@ -56,8 +56,10 @@
   gather_facts: true
   roles:
     - rabbitmq-role
+  vars: 
+        ns_name: "{{ gvars_rabbitmq_namespace_name }}"
 
-- hosts: kube-leader
+- hosts: kube-masters
   gather_facts: true
   become: true
   roles:
@@ -67,7 +69,7 @@
         application_yml_file: "deployment-producer.yml"
 
 
-- hosts: kube-leader
+- hosts: kube-masters
   gather_facts: true
   become: true
   roles:
@@ -76,3 +78,27 @@
      vars:
         application_yml_file: "deployment-consumer.yml"
         postgres_ip: "{{ hostvars[groups['dbserver'][0]].ansible_eth0.ipv4.address }}"
+
+- hosts: kube-masters
+  gather_facts: true
+  become: true
+  roles:
+    - istio
+
+- hosts: kube-masters
+  gather_facts: true
+  become: true
+  roles:
+   - name: kong
+     role: kong
+     vars:
+        kong_yml_file: "kong-dbless-istio.yml"
+
+- hosts: kube-masters
+  gather_facts: true
+  become: true
+  roles:
+   - name: metallb-role
+     role: metallb
+     vars:
+        metallb_ip_range: "{{ metallb_ip_range_list }}"

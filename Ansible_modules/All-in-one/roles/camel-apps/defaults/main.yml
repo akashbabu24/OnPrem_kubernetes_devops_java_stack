@@ -1,4 +1,4 @@
 application_manifests: "$HOME/.kube/camel-application-manifests"
 application_yml_file: 
 cmd_path: "kubectl"
-postgres_ip: "172.31.4.41"
+postgres_ip:

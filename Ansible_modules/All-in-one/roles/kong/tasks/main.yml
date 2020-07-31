@@ -16,6 +16,6 @@
     mode: 0755
 
 - name: Deploy Kong from kubernetes file
-  shell: "{{ cmd_path }} create -f {{ kong_manifests }}/{{ kong_yml_file }}"
+  shell: "{{ cmd_path }} apply -f {{ kong_manifests }}/{{ kong_yml_file }}"
   ignore_errors: true
 

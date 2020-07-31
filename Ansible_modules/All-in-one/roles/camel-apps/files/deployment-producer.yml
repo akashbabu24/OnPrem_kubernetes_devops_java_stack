@@ -5,7 +5,7 @@ metadata:
   namespace: rabbitmq
 spec:
   sessionAffinity: None
-  type: LoadBalancer
+  #type: LoadBalancer
   ports:
   - name: camel-producer-port
     port: 8085
@@ -23,7 +23,7 @@ metadata:
   name: camel-producer-deployment
   namespace: rabbitmq
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: back-end

@@ -1,0 +1,14 @@
+# Copy this file to the path /etc/systemd/system inorder to run prometheus container as a systemd service
+[host]
+Description= prometheus container
+After=docker.service
+Wants=network-online.target docker.socket
+Requires=docker.socket
+ 
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start -a prometheus
+ExecStop=/usr/bin/docker stop -t 10 prometheus
+ 
+[Install]
+WantedBy=multi-user.target

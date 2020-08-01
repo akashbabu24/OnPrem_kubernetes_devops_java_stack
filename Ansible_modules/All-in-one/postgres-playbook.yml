@@ -1,0 +1,8 @@
+---
+- hosts: dbserver
+  gather_facts: yes
+  become: yes
+  roles:
+       - postgres
+  vars:
+     postgresql_allowed_cidr: "{{ gvars_postgres_nfs_allowed_from_cidr }}"

@@ -22,9 +22,6 @@ import com.ascenthr.camel.producer.message.ResponseMessage;
 import com.ascenthr.camel.producer.model.Employee;
 import com.ascenthr.camel.producer.service.MetricsService;
 
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.MeterRegistry;
-
 /**
  * Rest Controller to handle file upload and process it. 
  * CSV file upload handle process the incoming employees list csv 

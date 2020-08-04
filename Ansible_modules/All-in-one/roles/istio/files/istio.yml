@@ -14246,9 +14246,11 @@ data:
       web_root: /kiali
     external_services:
       tracing:
-        url: 
+        namespace: istio-system
+        service: jaeger-query
+        url: http://jaeger-query.istio-system.svc.cluster.local:16686
       grafana:
-        url: 
+        url: http://grafana.istio-system.svc.cluster.local:3000
       prometheus:
         url: http://prometheus:9090
 
@@ -16426,10 +16428,12 @@ metadata:
     heritage: Tiller
     release: istio
 spec:
+  type: NodePort
   ports:
   - name: http-kiali
     protocol: TCP
     port: 20001
+    targetPort: 20001
   selector:
     app: kiali
 

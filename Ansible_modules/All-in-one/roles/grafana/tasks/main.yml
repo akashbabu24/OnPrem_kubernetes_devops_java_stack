@@ -1,7 +1,4 @@
 ---
-- hosts: all
-  name: grafana installation
-  tasks:
     - name: Ensure Docker is installed if not install
       yum:
        name: docker
@@ -25,7 +22,7 @@
            - "3000:3000"
     - name: Copying Service file to /etc/systemd/system path to run Grafana as a systemd service
       copy:
-        src: /tmp/grafana.service
+        src: grafana.service
         dest: /etc/systemd/system
         remote_src: no
         owner: root

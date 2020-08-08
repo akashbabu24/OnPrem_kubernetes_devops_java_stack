@@ -5,7 +5,7 @@ metadata:
   namespace: default
 spec:
   sessionAffinity: None
-  #type: LoadBalancer
+  type: NodePort
   ports:
   - name: camel-producer-port
     port: 8085
@@ -45,6 +45,12 @@ spec:
       - image: akashbabu24/ascenthr:akash-clproducer
         imagePullPolicy: Always
         name: camel-producer-container
+        env:
+          - name: SPRING_APPLICATION_JSON
+            value: '{
+                "management.endpoints.web.exposure.include":"prometheus",
+                "ascenthr.camel-rabbitmq-uri":"rabbitmq://rabbitmq.rabbitmq.svc.cluster.local:5672/example-exchange?vhost=example-vhost&queue=example-queue&username=admin&password=nimda&autoDelete=false&autoAck=true"
+                }'
         ports:
         - containerPort: 8085
           name: camel-producer

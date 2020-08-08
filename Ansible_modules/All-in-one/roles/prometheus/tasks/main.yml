@@ -27,7 +27,7 @@
            - /tmp/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     - name: Copying Service file to /etc/systemd/system path to run prometheus as a systemd service
       copy:
-        src: /tmp/prometheus.service
+        src: prometheus.service
         dest: /etc/systemd/system
         remote_src: no
         owner: root

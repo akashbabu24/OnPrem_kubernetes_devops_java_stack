@@ -5,4 +5,4 @@
   roles:
     - rabbitmq-role
   vars:
-        ns_name: "{{ gvars.ns_name }}"
+        ns_name: "{{ gvars_rabbitmq_namespace_name }}"

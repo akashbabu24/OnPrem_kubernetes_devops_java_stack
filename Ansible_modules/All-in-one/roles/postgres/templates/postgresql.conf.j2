@@ -103,11 +103,11 @@ ssl = on
 {% if not postgresql_enable_SSL %}
 ssl = off
 {% endif %}
-#ssl_ca_file = '/var/lib/pgsql/12/root.crt'
-#ssl_cert_file = '/var/lib/pgsql/12/server.crt'
+ssl_ca_file = '/var/lib/pgsql/12/root.crt'
+ssl_cert_file = '/var/lib/pgsql/12/server.crt'
 #ssl_crl_file = ''
-#ssl_key_file = '/var/lib/pgsql/12/server.key'
-#ssl_ciphers = 'HIGH:MEDIUM:+3DES:!aNULL' # allowed SSL ciphers
+ssl_key_file = '/var/lib/pgsql/12/server.key'
+ssl_ciphers = 'HIGH:MEDIUM:+3DES:!aNULL' # allowed SSL ciphers
 #ssl_prefer_server_ciphers = on
 #ssl_ecdh_curve = 'prime256v1'
 #ssl_min_protocol_version = 'TLSv1'

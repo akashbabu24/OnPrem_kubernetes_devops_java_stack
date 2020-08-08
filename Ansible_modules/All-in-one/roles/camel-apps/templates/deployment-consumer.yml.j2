@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: camel-consumer-deployment
-  namespace: rabbitmq
+  namespace: default
 spec:
   replicas: 2
   selector:
@@ -20,7 +20,7 @@ spec:
         app: back-end-consumer
         type: camel-consumer-jar
       name: camel-consumer
-      namespace: rabbitmq
+      namespace: default
     spec:
       containers:
       - image: akashbabu24/ascenthr:akash-clconsumer
@@ -42,4 +42,4 @@ spec:
           command: ['sh', '-c', "until nslookup rabbitmq.rabbitmq.svc.cluster.local; do echo waiting for rabbitmq; sleep 2; done"]
         - name: waiting-for-producer
           image: busybox:1.28
-          command: ['sh', '-c', "until nslookup camel-producer.rabbitmq.svc.cluster.local; do echo waiting for Producer; sleep 2; done"]
+          command: ['sh', '-c', "until nslookup camel-producer.default.svc.cluster.local; do echo waiting for Producer; sleep 2; done"]

@@ -13,7 +13,7 @@
             group: root
             mode: "0775"
             allow_from:
-              - "{{ allowed_from_cidr }}"
+              - "{{ gvars_postgres_nfs_allowed_from_cidr }}"
 - hosts: nfs-client
   gather_facts: yes
   become: yes

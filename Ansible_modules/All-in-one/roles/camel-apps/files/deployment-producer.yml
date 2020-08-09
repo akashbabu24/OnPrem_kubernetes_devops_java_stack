@@ -49,15 +49,74 @@ spec:
           - name: SPRING_APPLICATION_JSON
             value: '{
                 "management.endpoints.web.exposure.include":"prometheus",
-                "ascenthr.camel-rabbitmq-uri":"rabbitmq://rabbitmq.rabbitmq.svc.cluster.local:5672/example-exchange?vhost=example-vhost&queue=example-queue&username=admin&password=nimda&autoDelete=false&autoAck=true"
+                "ascenthr.camel-rabbitmq-uri":"rabbitmq://rabbitmq.rabbitmq.svc.cluster.local:5672/example-exchange?vhost=example-vhost&queue=example-queue&username=admin&password=nimda&autoDelete=false&autoAck=true",
+                "logging.file":"/opt/camelproducer.log"
                 }'
         ports:
         - containerPort: 8085
           name: camel-producer
           protocol: TCP
+        volumeMounts:
+        - name: app-logs 
+          mountPath: /opt
+      - name: filebeat
+        image: elastic/filebeat:7.8.1
+        args: [
+          "-c", "/etc/filebeat.yml",
+          "-e",
+        ]
+        resources:
+          limits:
+            memory: 500Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        securityContext:
+          runAsUser: 0
+        volumeMounts:
+        - name: filebeat-config
+          mountPath: /etc/filebeat.yml
+          subPath: filebeat.yml
+        - name: app-logs 
+          mountPath: /opt
       restartPolicy: Always
-
+      volumes:
+      - name: app-logs
+        emptyDir: {}
+      - name: filebeat-config
+        configMap:
+          name: filebeat-config
       initContainers:
         - name: waiting-for-rabbitmq
           image: busybox:1.28
           command: ['sh', '-c', "until nslookup rabbitmq.rabbitmq.svc.cluster.local; do echo waiting for rabbitmq; sleep 2; done"]
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: filebeat-config
+
+data:
+  filebeat.yml: |-
+    filebeat.inputs:
+    - type: log
+      paths:
+        - /opt/*.log
+
+      fields:
+        app: producer
+        type: producer
+      fields_under_root: true
+      multiline:
+        pattern: '^\['
+        negate: true
+        match: after
+
+    setup.ilm.enabled: false
+    setup.template.name: "tomcat-catalina"
+    setup.template.pattern: "tomcat-catalina-*"
+
+    output.logstash:
+      hosts: ['54.169.15.55:5044']
+      index: "producer-%{+yyyy.MM.dd}"

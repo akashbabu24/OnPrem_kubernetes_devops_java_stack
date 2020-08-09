@@ -2,9 +2,11 @@ FROM arrun003/centos7java8:v1
 
 LABEL maintainer "Arun Baskaran"
 
-COPY target/camel-producer-0.0.1-SNAPSHOT.jar /opt/
+RUN mkdir -p /app
 
-WORKDIR /opt/
+COPY target/camel-producer-0.0.1-SNAPSHOT.jar /app
+
+WORKDIR /app
 
 EXPOSE 8085
 

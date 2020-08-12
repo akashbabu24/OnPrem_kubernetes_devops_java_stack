@@ -6,5 +6,6 @@ META-INF\spring-configuration-metadata.json
 com\ascenthr\camel\consumer\config\ConfigProperties.class
 com\ascenthr\camel\consumer\model\QueueMessage.class
 com\ascenthr\camel\consumer\processor\QueueMessageProcessor.class
+com\ascenthr\camel\consumer\service\MetricsService.class
 com\ascenthr\camel\consumer\converter\EmployeeListConverter.class
 com\ascenthr\camel\consumer\service\QueueMessageService.class

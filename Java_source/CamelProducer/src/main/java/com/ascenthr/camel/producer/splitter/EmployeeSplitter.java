@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import com.ascenthr.camel.producer.config.ConfigProperties;
 import com.ascenthr.camel.producer.message.QueueMessage;
 import com.ascenthr.camel.producer.model.Employee;
+import com.ascenthr.camel.producer.service.MetricsService;
 
 /**
  * Employee splitter bean used to split incoming employees list into chunks before sending to message queue
@@ -23,6 +24,9 @@ import com.ascenthr.camel.producer.model.Employee;
 public class EmployeeSplitter {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeSplitter.class);
+	
+	@Autowired
+	private MetricsService metricsService;
 	
 	@Autowired
 	private ConfigProperties config;
@@ -49,6 +53,12 @@ public class EmployeeSplitter {
 		List<QueueMessage> messages = splittedEmployees.stream()
 				.map( employees -> new QueueMessage(tenantId, employees))
 				.collect(Collectors.toList());
+		
+		LOGGER.info("Incrementing total no. of message sending to queue counter for TENANTID=" + tenantId);
+		metricsService.incrementMessageSentToQueueCounter((double)messages.size());
+		
+		LOGGER.info("Incrementing total no. of employees sending to queue counter for TENANTID=" + tenantId);
+		metricsService.incrementEmployeeSentToQueueCounter((double)allEmployees.size());
 		
 		LOGGER.info("TENANTID=" + tenantId + ". Splitted employees into chunks. Total messages= " + messages.size());
 		

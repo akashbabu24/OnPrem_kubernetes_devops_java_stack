@@ -97,3 +97,7 @@ data:
       routes:
       - paths:
         - "/producer/api/v1/upload/csv"
+    - url: "http://camel-producer.default.svc.cluster.local:8085/actuator/prometheus"
+      routes:
+      - paths:
+        - "/actuator/prometheus"

@@ -5,3 +5,5 @@
   roles:
    - name: prometheus role
      role: prometheus
+     vars:
+       prom_config_folder: "{{ gvars_prom_config_folder }}"

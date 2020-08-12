@@ -16535,6 +16535,7 @@ metadata:
     heritage: Tiller
     release: istio
 spec:
+  type: NodePort
   selector:
     app: prometheus
   ports:

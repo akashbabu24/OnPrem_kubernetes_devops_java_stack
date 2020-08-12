@@ -12,25 +12,64 @@
       yum:
        name: python-docker
        state: latest
+    - name: Get Kong IP
+      shell: echo $(sudo kubectl get svc | grep kong | awk '{print $4}')
+      register: kong_ip_addr
+      delegate_to: "{{ groups['kube-masters'][0] }}"
+    - name: Get Kong Port
+      shell: |
+            echo $(sudo kubectl get svc | grep kong | awk '{print $5}' | awk -F"/" '{print $1}' | awk -F":" '{print $2}')
+      register: kong_node_port
+      delegate_to: "{{ groups['kube-masters'][0] }}"
+
+    - set_fact:
+        kong_ip: "{{ kong_ip_addr.stdout }}"
+    - set_fact:
+        kong_port: "{{ kong_node_port.stdout }}"
+
+    #- name: To check if prometheus host folder exists
+     # stat:
+      # path: "{{ prom_config_folder }}"
+      #register: prom_config_folder_exists
+
+    - name: Create prometheus host config folder
+      #shell: mkdir /tmp/prom/
+      file:
+        path: "{{ prom_config_folder }}"
+        state: directory
+        mode: 0777
+ 
+    - name: Copy prometheus config YAML file to the prometheus container
+      template:
+       src: prometheus.yml.j2
+       dest: "/tmp/prom/prometheus.yml"
+       mode: 0777
+      vars:
+        kong_ip: "{{ kong_ip }}"
+        kong_port: "{{ kong_port }}"
+        
+ 
     - name: Prometheus container creation
       docker_container:
         name: prometheus
         image: prom/prometheus
         state: started
         detach: yes
+        #user: "1000:1000"
         ports:
-           - "9090:9090"
+           - "9091:9090"
         volumes:
-           - /tmp/prom/:/opt/prometheus/:ro
+           - /tmp/prom/prometheus.yml:/opt/prometheus/prometheus.yml
         command:
            - '--config.file=/opt/prometheus/prometheus.yml'
-           - '--storage.tsdb.path=/prometheus'
-           - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-           - '--web.console.templates=/usr/share/prometheus/consoles'
+           #- '--storage.tsdb.path=/prometheus'
+           #- '--web.console.libraries=/usr/share/prometheus/console_libraries'
+           #- '--web.console.templates=/usr/share/prometheus/consoles'
+
     - name: Copying Service file to /etc/systemd/system path to run prometheus as a systemd service
-      copy:
-        src: prometheus.service
-        dest: /etc/systemd/system
+      template:
+        src: prometheus.service.j2
+        dest: /etc/systemd/system/prometheus.service
         remote_src: no
         owner: root
         mode: 0777
@@ -41,10 +80,7 @@
         state: started
     - name: Check if Prometheus is accessible
       uri:
-        url: http://localhost:9090
+        url: http://localhost:9091
         method: GET
         status_code: 200
-
-        
-
 

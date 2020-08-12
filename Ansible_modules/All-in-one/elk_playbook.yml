@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: ELK
   gather_facts: yes
   become: yes
   remote_user: centos
@@ -30,7 +30,7 @@
         state=present
 
 
-- hosts: elastic  
+- hosts: ELK
   become: yes
   remote_user: centos
   vars_files:
@@ -38,7 +38,7 @@
   roles:
     - elastic
 
-- hosts: kibana  
+- hosts: ELK  
   become: yes
   remote_user: centos
   vars_files:
@@ -46,7 +46,7 @@
   roles:
     - kibana
 
-- hosts: logstash  
+- hosts: ELK  
   become: yes
   remote_user: centos
   vars_files:

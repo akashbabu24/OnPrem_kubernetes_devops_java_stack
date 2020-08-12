@@ -118,5 +118,5 @@ data:
     setup.template.pattern: "tomcat-catalina-*"
 
     output.logstash:
-      hosts: ['54.169.15.55:5044']
+      hosts: ["{{ groups['ELK'][0] }}:5044"]
       index: "producer-%{+yyyy.MM.dd}"

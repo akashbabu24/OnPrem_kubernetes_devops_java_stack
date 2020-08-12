@@ -14,6 +14,12 @@
   roles:
     - kubeadm-worker-role
 
+- hosts: kube-masters
+  gather_facts: true
+  become: true
+  roles:
+    - istio
+
 - hosts: nfs-server
   gather_facts: yes
   become: yes
@@ -79,11 +85,6 @@
         application_yml_file: "deployment-consumer.yml"
         postgres_ip: "{{ hostvars[groups['dbserver'][0]].ansible_eth0.ipv4.address }}"
 
-- hosts: kube-masters
-  gather_facts: true
-  become: true
-  roles:
-    - istio
 
 - hosts: kube-masters
   gather_facts: true
@@ -102,3 +103,20 @@
      role: metallb
      vars:
         metallb_ip_range: "{{ metallb_ip_range_list }}"
+
+
+- hosts: monitoring
+  gather_facts: true
+  become: true
+  roles:
+   - name: prometheus role
+     role: prometheus
+     vars:
+       prom_config_folder: "{{ gvars_prom_config_folder }}"
+
+- hosts: monitoring
+  gather_facts: true
+  become: true
+  roles:
+   - name: grafana role
+     role: grafana

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.ascenthr.camel.consumer.model.QueueMessage;
 import com.ascenthr.camel.consumer.service.QueueMessageService;
+import com.ascenthr.camel.consumer.service.MetricsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -23,6 +24,8 @@ public class QueueMessageProcessor implements Processor{
 	private final static ObjectMapper objectMapper = new ObjectMapper();
 	
 	@Autowired
+	private MetricsService metricsService;
+	@Autowired
 	private QueueMessageService service;
 	
 	@Override
@@ -31,6 +34,13 @@ public class QueueMessageProcessor implements Processor{
 		LOGGER.info("Processing queue message to store into database");
 		QueueMessage message = objectMapper.readValue(exchange.getIn().getBody(String.class), QueueMessage.class);
 		service.save(message);
+		
+		LOGGER.info("Incrementing total no. of message received from the queue counter for TENANTID=" + message.getTenantId());
+		metricsService.incrementMessageReceivedFromQueueCounter();
+		
+		LOGGER.info("Incrementing total no. of employees received from the queue counter for TENANTID=" + message.getTenantId());
+		metricsService.incrementEmployeeReceivedFromQueueCounter((double)message.getEmployees().size());
+		
 		LOGGER.info("Completed processing by storing queue message into database for TENANTID=" + message.getTenantId());
 	}
 

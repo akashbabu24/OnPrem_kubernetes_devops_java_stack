@@ -1,43 +1,73 @@
 ---
-    - name: Ensure Docker is installed if not install
+    - name: Ensure yum-utils present for adding docker repo
       yum:
-       name: docker
-       state: latest
+       name: yum-utils
+       state: present
+
+    - name: add yum-config-manager for installing docker-ce
+      shell: sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+    - name: install docker-ce
+      yum:
+       name:
+       - docker-ce
+       - docker-ce-cli
+       - containerd.io
+       - python-docker
+       state: present
+
     - name: Start docker service, if not start
       service:
         name: docker
         enabled: yes
         state: started
-    - name: Ensure python-Docker package is installed, if not install
-      yum:
-       name: python-docker
-       state: latest
+
+    - name: Create grafana config volume mount folder
+      file:
+        path: "{{ grafana_config_folder }}"
+        state: directory
+        #mode: 0777
+
+    - name: Copy grafana config YAML file to the prometheus container
+      template:
+       src: "{{ item }}.j2"
+       dest: "{{ grafana_config_folder }}/{{ item }}"
+       mode: 0755
+      with_items:
+        - datasources.yml
+        - dashboardproviders.yml
+        - producer-metrics.json
+        - consumer-metrics.json
     - name: Grafana container creation
       docker_container:
         name: grafana
         image: grafana/grafana
         state: started
         detach: yes
+        recreate: yes
         ports:
-           - "3000:3000"
+           - "{{ grafana_port }}:3000"
+        volumes:
+           - "{{ grafana_config_folder }}/producer-metrics.json:/var/lib/grafana/dashboards/camel-producer-metrics/producer-metrics.json" 
+           - "{{ grafana_config_folder }}/consumer-metrics.json:/var/lib/grafana/dashboards/camel-consumer-metrics/consumer-metrics.json"
+           - "{{ grafana_config_folder }}/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml"
+           - "{{ grafana_config_folder }}/dashboardproviders.yml:/etc/grafana/provisioning/dashboards/dashboardproviders.yml"
     - name: Copying Service file to /etc/systemd/system path to run Grafana as a systemd service
       copy:
         src: grafana.service
         dest: /etc/systemd/system
         remote_src: no
         owner: root
-        mode: 0777
+        #mode: 0777
     - name: Enable grafana systemd service and ensure it is running
       service:
         name: grafana.service
         enabled: yes
         state: started
+      ignore_errors: true
     - name: Check if grafana is accessible
       uri:
-         url: http://localhost:3000
+         url: http://localhost:{{ grafana_port }}
          method: GET
          status_code: 200
-
-        
-
-
+      ignore_errors: true

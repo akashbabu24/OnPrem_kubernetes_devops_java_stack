@@ -1,1 +1,2 @@
-prom_config_folder: /tmp/prom
+prometheus_config_folder: /tmp/prometheus
+prometheus_port: 9091

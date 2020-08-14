@@ -100,4 +100,8 @@ data:
     - url: "http://camel-producer.default.svc.cluster.local:8085/actuator/prometheus"
       routes:
       - paths:
-        - "/actuator/prometheus"
+        - "/producer/prometheus"
+    - url: "http://camel-consumer.default.svc.cluster.local:8086/actuator/prometheus"
+      routes:
+      - paths:
+        - "/consumer/prometheus"

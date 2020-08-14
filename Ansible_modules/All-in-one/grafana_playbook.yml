@@ -5,3 +5,5 @@
   roles:
    - name: grafana role
      role: grafana
+     vars_files:
+       - group_vars/all.yml

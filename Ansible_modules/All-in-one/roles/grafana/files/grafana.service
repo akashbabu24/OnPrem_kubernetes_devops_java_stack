@@ -1,5 +1,6 @@
 # Copy this file to the path /etc/systemd/system inorder to run grafana container as a systemd service
-[host]
+#[host]
+[Unit]
 Description=grafana container
 After=docker.service
 Wants=network-online.target docker.socket
@@ -9,6 +10,8 @@ Requires=docker.socket
 Restart=always
 ExecStart=/usr/bin/docker start -a grafana
 ExecStop=/usr/bin/docker stop -t 10 grafana
+User=root
+Group=root
  
 [Install]
 WantedBy=multi-user.target

@@ -32,9 +32,44 @@ spec:
                 "spring.datasource.url":"jdbc:postgresql://{{ postgres_ip }}:5432/ascentdb?currentSchema=ascentschema",
                 "spring.datasource.username":"ascentuser",
                 "spring.datasource.password":"ascent123",
-                "ascenthr.camel-rabbitmq-uri":"rabbitmq://rabbitmq.rabbitmq.svc.cluster.local:5672/example-exchange?vhost=example-vhost&queue=example-queue&username=admin&password=nimda&autoDelete=false&autoAck=true"
+                "ascenthr.camel-rabbitmq-uri":"rabbitmq://rabbitmq.rabbitmq.svc.cluster.local:5672/example-exchange?vhost=example-vhost&queue=example-queue&username=admin&password=nimda&autoDelete=false&autoAck=true",
+                "management.endpoints.web.exposure.include":"prometheus",
+                "logging.file":"/opt/camelconsumer.log"
                 }'
+        ports:
+        - containerPort: 8086
+          name: camel-consumer
+          protocol: TCP
+        volumeMounts:
+        - name: app-logs
+          mountPath: /opt
+      - name: filebeat
+        image: elastic/filebeat:7.8.1
+        args: [
+          "-c", "/etc/filebeat.yml",
+          "-e",
+        ]
+        resources:
+          limits:
+            memory: 500Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        securityContext:
+          runAsUser: 0
+        volumeMounts:
+        - name: filebeat-config
+          mountPath: /etc/filebeat.yml
+          subPath: filebeat.yml
+        - name: app-logs
+          mountPath: /opt
       restartPolicy: Always
+      volumes:
+      - name: app-logs
+        emptyDir: {}
+      - name: filebeat-config
+        configMap:
+          name: filebeat-config
 
       initContainers:
         - name: waiting-for-rabbitmq
@@ -43,3 +78,33 @@ spec:
         - name: waiting-for-producer
           image: busybox:1.28
           command: ['sh', '-c', "until nslookup camel-producer.default.svc.cluster.local; do echo waiting for Producer; sleep 2; done"]
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: filebeat-config
+
+data:
+  filebeat.yml: |-
+    filebeat.inputs:
+    - type: log
+      paths:
+        - /opt/*.log
+
+      fields:
+        app: consumer
+        type: consumer
+      fields_under_root: true
+      multiline:
+        pattern: '^\['
+        negate: true
+        match: after
+
+    setup.ilm.enabled: false
+    setup.template.name: "tomcat-catalina"
+    setup.template.pattern: "tomcat-catalina-*"
+
+    output.logstash:
+      hosts: ["{{ groups['ELK'][0] }}:5044"]
+      index: "consumer-%{+yyyy.MM.dd}"

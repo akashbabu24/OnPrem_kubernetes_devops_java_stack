@@ -1,26 +1,17 @@
 ---
-    - name: Ensure yum-utils present for adding docker repo
+    - name: Ensure Docker is installed if not install
       yum:
-       name: yum-utils
-       state: present
-    
-    - name: add yum-config-manager for installing docker-ce
-      shell: sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-  
-    - name: install docker-ce
-      yum:
-       name:
-       - docker-ce
-       - docker-ce-cli
-       - containerd.io
-       - python-docker 
-       state: present
-
+       name: docker
+       state: latest
     - name: Start docker service, if not start
       service:
         name: docker
         enabled: yes
         state: started
+    - name: Ensure python-Docker package is installed, if not install
+      yum:
+       name: python-docker
+       state: latest
     - name: Get Kong IP
       shell: echo $(sudo kubectl get svc | grep kong | awk '{print $4}')
       register: kong_ip_addr
@@ -36,45 +27,39 @@
     - set_fact:
         kong_port: "{{ kong_node_port.stdout }}"
 
-    #- name: To check if prometheus host folder exists
-     # stat:
-      # path: "{{ prometheus_config_folder }}"
-      #register: prometheus_config_folder_exists
-    - name: Create prometheus host config folder
-      file:
-            path: "{{ prometheus_config_folder }}"
-            state: directory
-            mode: 0777
-#            owner: 65534
- #           group: 65534
+    #- name: Create prometheus host config folder
+      #file:
+        #path: /tmp
+        #state: directory
+        #mode: 0755
+        #owner: 65534
+        #group: 65534
  
     - name: Copy prometheus config YAML file to the prometheus container
       template:
        src: prometheus.yml.j2
-       dest: "{{ prometheus_config_folder }}/prometheus.yml"
-       mode: 0777
+       dest: /tmp/prometheus.yml
+       mode: 0755
+       owner: 65534
+       group: 65534
       vars:
         kong_ip: "{{ kong_ip }}"
-        kong_port: "{{ kong_port }}"        
+        kong_port: "{{ kong_port }}"
+        
  
     - name: Prometheus container creation
       docker_container:
         name: prometheus
-        image: docker.io/prom/prometheus
+        #image: prom/prometheus
+        image: akashbabu24/ascenthr:newProm
         state: started
         detach: yes
-        recreate: yes
         ports:
-           - "{{ prometheus_port }}:9090"
+           - "9091:9090"
         volumes:
-           - "{{ prometheus_config_folder }}:/opt/prometheus/"
-           
+           #- /tmp/prometheus.yml:/etc/prometheus/prometheus.yml:ro
         command:
-           - '--config.file=/opt/prometheus/prometheus.yml'
-           #- '--storage.tsdb.path=/prometheus'
-           #- '--web.console.libraries=/usr/share/prometheus/console_libraries'
-           #- '--web.console.templates=/usr/share/prometheus/consoles'
-
+           #- '--config.file=/etc/prometheus/prometheus.yml'
 
     - name: Copying Service file to /etc/systemd/system path to run prometheus as a systemd service
       template:
@@ -88,10 +73,8 @@
         name: prometheus.service
         enabled: yes
         state: started
-      ignore_errors: true
     - name: Check if Prometheus is accessible
       uri:
         url: http://localhost:9091
         method: GET
         status_code: 200
-      ignore_errors: true

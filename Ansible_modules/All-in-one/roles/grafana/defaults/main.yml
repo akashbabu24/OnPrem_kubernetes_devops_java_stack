@@ -1,0 +1,4 @@
+prometheus_ip:
+prometheus_port:
+grafana_config_folder: /tmp/grafana
+grafana_port: 3000 

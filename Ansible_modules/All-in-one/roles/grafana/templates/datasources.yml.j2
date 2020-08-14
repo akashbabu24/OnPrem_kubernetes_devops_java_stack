@@ -1,0 +1,9 @@
+apiVersion: 1
+datasources:
+    - access: server
+      editable: true
+      isDefault: true
+      name: Prometheus_extrnl
+      orgId: 1
+      type: prometheus
+      url: http://{{ prometheus_ip }}:{{ prometheus_port }}

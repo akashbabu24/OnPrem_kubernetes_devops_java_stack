@@ -23,7 +23,16 @@ es_url: "http://localhost:9200"
 kibana_user: admin
 kibana_password: admin
 www_kibana_port: 80
-nginx_server_domain: 34.234.234.179
+nginx_server_domain: 3.235.136.70     #Kibana browser-reachable IP to be added to Nginx config that is before Kibana. Private internal IP might not work if it is not reachable from browser as it is NGINX server 'domain/ip'.
 #nginx_server_domain: "{{ groups['ELK'][0] }}"
 
 #Logstash Setting
+#
+#
+#Prometheus vars
+prometheus_port: 9091
+prometheus_config_folder: /tmp/prometheus
+#Grafana vars
+prometheus_ip: 3.237.77.60      #prometheus's browser-reachable IP for connection purposes from Grafana. Since Grafana is running as docker, ONLY browser-reachable IP works and not private server-internal IP.
+grafana_config_folder: /tmp/grafana
+grafana_port: 3000

@@ -1,9 +1,8 @@
----
-- hosts: monitoring 
+- hosts: monitoring
   gather_facts: true
   become: true
   roles:
    - name: prometheus role
      role: prometheus
-     vars:
-       prom_config_folder: "{{ gvars_prom_config_folder }}"
+     vars_files:
+        - group_vars/all.yml

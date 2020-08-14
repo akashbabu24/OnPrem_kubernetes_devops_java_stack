@@ -111,8 +111,8 @@
   roles:
    - name: prometheus role
      role: prometheus
-     vars:
-       prom_config_folder: "{{ gvars_prom_config_folder }}"
+     vars_files:
+        - group_vars/all.yml
 
 - hosts: monitoring
   gather_facts: true
@@ -120,3 +120,62 @@
   roles:
    - name: grafana role
      role: grafana
+     vars_files:
+       - group_vars/all.yml
+
+#ELK playbook
+- hosts: ELK
+  gather_facts: yes
+  become: yes
+  remote_user: centos
+  vars_files:
+    - group_vars/all.yml
+
+# Pre task Evalutavet the host machine is Redhat Family or Support YUM Package manager
+  pre_tasks:
+    - name: Check OS support
+      fail:
+        msg: The following OS family {{ ansible_os_family }} {{ ansible_architecture }} is not supported
+      when: not ansible_os_family == "RedHat" or not ansible_architecture == "x86_64"
+
+    - name: Check package manager support
+      fail:
+        msg: The following package manager {{ ansible_pkg_mgr }} is not supported
+      when: not ansible_pkg_mgr == "yum"
+
+# Install Java in the remote as java requried for all
+  tasks:
+    - name: Install openjdk
+      yum:
+        name: java-1.8.0-openjdk-headless
+        state: present
+
+    - name: Check/Install EPEL Repo
+      yum: name={{epel_repo}}
+        state=present
+
+
+- hosts: ELK
+  become: yes
+  remote_user: centos
+  vars_files:
+    - group_vars/all.yml
+  roles:
+    - elastic
+
+- hosts: ELK
+  become: yes
+  remote_user: centos
+  vars_files:
+    - group_vars/all.yml
+  roles:
+    - kibana
+
+- hosts: ELK
+  become: yes
+  remote_user: centos
+  vars_files:
+    - group_vars/all.yml
+  roles:
+    - logstash
+

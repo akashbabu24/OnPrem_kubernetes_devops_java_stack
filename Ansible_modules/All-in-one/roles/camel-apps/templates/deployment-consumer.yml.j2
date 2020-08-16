@@ -22,8 +22,10 @@ spec:
       name: camel-consumer
       namespace: default
     spec:
+      imagePullSecrets:
+      - name: ascenthr
       containers:
-      - image: akashbabu24/ascenthr:akash-clconsumer
+      - image: 3.1.5.157:8082/clconsumer
         imagePullPolicy: Always
         name: camel-consumer-container
         env:
@@ -78,7 +80,7 @@ spec:
         - name: waiting-for-producer
           image: busybox:1.28
           command: ['sh', '-c', "until nslookup camel-producer.default.svc.cluster.local; do echo waiting for Producer; sleep 2; done"]
-
+      
 ---
 apiVersion: v1
 kind: ConfigMap

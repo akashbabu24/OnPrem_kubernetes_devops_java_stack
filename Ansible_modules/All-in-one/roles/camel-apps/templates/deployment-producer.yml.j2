@@ -41,8 +41,10 @@ spec:
       name: camel-producer
       namespace: default
     spec:
+      imagePullSecrets:
+      - name: ascenthr
       containers:
-      - image: akashbabu24/ascenthr:akash-clproducer
+      - image: 3.1.5.157:8082/clproducer
         imagePullPolicy: Always
         name: camel-producer-container
         env:

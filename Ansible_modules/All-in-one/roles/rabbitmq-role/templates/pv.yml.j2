@@ -10,7 +10,7 @@ spec:
   capacity:
     storage: 10Gi
   nfs:
-   server: 192.168.0.36
+   server: {{ groups['nfs-server'][0] }}
    path: /kube_data
 
 ---
@@ -27,7 +27,7 @@ spec:
   capacity:
     storage: 10Gi
   nfs:
-   server: 192.168.0.36
+   server: {{ groups['nfs-server'][0] }}
    path: /kube_data
 
 ---
@@ -44,5 +44,5 @@ spec:
   capacity:
     storage: 10Gi
   nfs:
-   server: 192.168.0.36
+   server: {{ groups['nfs-server'][0] }}
    path: /kube_data

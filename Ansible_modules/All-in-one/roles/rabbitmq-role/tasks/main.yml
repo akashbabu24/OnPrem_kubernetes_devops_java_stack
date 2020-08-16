@@ -22,14 +22,21 @@
   when:
      - not application_manifests_exists.stat.exists 
 
-- name: Copy application YAML file to K8 master
+- name: Copy PV YAML file to K8 master
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ application_manifests }}/{{ item }}"
+    mode: 0755
+  with_items:
+        - pv.yml
+
+- name: Copy Rabbitmq manifest YAML files to K8 master
   copy:
     src: "{{ item }}"
     dest: "{{ application_manifests }}/{{ item }}"
     mode: 0755
   with_items:
         - creating-rbac.yml
-        - pv.yml
         - pvc.yml
         - stateful-set.yml
         - service.yml

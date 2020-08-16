@@ -86,14 +86,14 @@
         postgres_ip: "{{ hostvars[groups['dbserver'][0]].ansible_eth0.ipv4.address }}"
 
 
-- hosts: kube-masters
-  gather_facts: true
-  become: true
-  roles:
-   - name: kong
-     role: kong
-     vars:
-        kong_yml_file: "kong-dbless-istio.yml"
+#- hosts: kube-masters
+ # gather_facts: true
+ # become: true
+  #roles:
+   #- name: kong
+    # role: kong
+     #vars:
+      #  kong_yml_file: "kong-dbless-istio.yml"
 
 - hosts: kube-masters
   gather_facts: true

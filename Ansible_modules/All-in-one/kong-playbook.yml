@@ -1,9 +1,11 @@
 ---
-- hosts: kube-leader 
+- hosts: kube-masters
   gather_facts: true
   become: true
   roles:
    - name: kong
      role: kong
-     vars:
-        kong_yml_file: "kong-dbless-istio.yml"
+     #vars:
+        #kong_yml_file: "kong-dbless-istio.yml"
+     vars_files:
+      - group_vars/all.yml

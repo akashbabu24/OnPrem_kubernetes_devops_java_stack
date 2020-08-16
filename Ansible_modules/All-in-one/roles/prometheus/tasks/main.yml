@@ -27,7 +27,7 @@
       delegate_to: "{{ groups['kube-masters'][0] }}"
     - name: Get Kong Port
       shell: |
-            echo $(sudo kubectl get svc | grep kong | awk '{print $5}' | awk -F"/" '{print $1}' | awk -F":" '{print $2}')
+            echo $(sudo kubectl get svc -n kong | grep kong | awk '{print $5}' | awk -F"/" '{print $1}' | awk -F":" '{print $2}')
       register: kong_node_port
       delegate_to: "{{ groups['kube-masters'][0] }}"
 

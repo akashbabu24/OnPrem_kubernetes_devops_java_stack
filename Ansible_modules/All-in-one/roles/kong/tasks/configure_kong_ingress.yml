@@ -1,0 +1,46 @@
+- name: Ensure epel-release present as pre-req for jq and install jq
+  yum:
+     name: 
+      - epel-release
+      - jq
+     state: present
+
+- name: Copy kong certs to Kong manifests on master
+  copy:
+    src: "{{ item }}"
+    dest: "{{ kong_manifests }}/{{ item }}"
+    mode: 0444
+  with_items:
+   - kong_app_ca.crt
+   - kong_app_cert.crt
+   - private.key
+
+- name: Get Kong Port
+  shell: |
+            echo $(sudo kubectl get svc -n kong | grep kong | awk '{print $5}' | awk -F"/" '{print $3}' | awk -F":" '{print $2}')
+  register: kong_node_port
+
+- set_fact:
+        kong_port: "{{ kong_node_port.stdout }}"
+- set_fact:
+        kong_ip: "{{ groups['kube-workers'][0] }}"
+
+- name: Create kong certificate on kong db for our applications
+  shell: curl --location --request POST "http://{{ kong_ip|quote }}:{{ kong_port|quote }}/certificates" --form 'cert=@{{ kong_manifests|quote }}/kong_app_ca.crt' --form 'cert=@{{ kong_manifests|quote }}/kong_app_cert.crt' --form 'key=@{{ kong_manifests|quote }}/private.key' --form 'snis=ec2-54-83-152-144.compute-1.amazonaws.com' | jq .id
+  register: kong_app_cert_id
+  run_once: true
+
+- set_fact:
+        kong_cert_id: "{{ kong_app_cert_id.stdout }}"
+
+- name: Attach SNI to the kong certificate on kong db for our applications
+  shell: curl --location --request PATCH 'http://{{ kong_ip|quote }}:{{ kong_port|quote }}/certificates/{{ kong_cert_id|quote }}' --form 'snis={{ kong_domain|quote }}'
+  run_once: true
+
+- name: add service for producer actuator
+  shell: curl --location --request POST 'http://{{ kong_ip|quote }}:{{ kong_port|quote }}/services' --form 'url=http://camel-producer.default.svc.cluster.local:8085/actuator/prometheus' --form 'name=producer-prometheus'
+  run_once: true
+
+- name: add route for the producer actuator
+  shell: curl --location --request POST 'http://{{ kong_ip|quote }}:{{ kong_port|quote }}/services/producer-prometheus/routes' --form 'protocols=https' --form 'paths=/actuator/prometheus' --form 'name=producer-prometheus-route' --form 'snis=ec2-54-83-152-144.compute-1.amazonaws.com'
+  run_once: true

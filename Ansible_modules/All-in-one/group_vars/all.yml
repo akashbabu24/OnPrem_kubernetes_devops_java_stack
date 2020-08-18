@@ -3,20 +3,24 @@ nexus_docker_registry_url: 3.1.5.157:8082
 nexus_docker_registry_user: admin
 nexus_docker_registry_pwd: vine@2013
 nexus_docker_registry_email: akashbabu24@iclust.com
-if_insecure_registry: true
+if_insecure_registry: True
 
-nfs_server_export_dir: /kubedata
-nfs_server_export_dir2: /postgresdata
-nfs_client_share_dir: /mnt/kubedata
-nfs_client_share_dir2: /mnt/postgresdata
-gvars_postgres_nfs_allowed_from_cidr: 172.31.0.0/20
+nfs_server_export_dir: /kubedata3
+nfs_server_export_dir2: /postgresdata4
+nfs_client_share_dir: /mnt/kubedata3
+nfs_client_share_dir2: /mnt/postgresdata4
+gvars_nfs_allowed_from_cidr: "*"            #for NFS server, the allowed CIDR to consume mounts. Other IP ranges would not be allowed to connect
+gvars_postgres_allowed_from_cidr: 172.31.0.0/20  # for external postgres server, the allowed CIDR. Other IP ranges would not be allowed to connect
 
 metallb_ip_range_list: ["172.31.14.1-172.31.14.10"]
 gvars_rabbitmq_namespace_name: "rabbitmq"
 
 #camel-apps variables
-producer_docker_image_tag: clproducer
-consumer_docker_image_tag: clconsumer
+
+producer_docker_image_tag: akash-clproducer-metric
+consumer_docker_image_tag: akash-clconsumer-metric
+#producer_docker_image_tag: akash-clproducer-9d
+#consumer_docker_image_tag: akash-clconsumer-17dnewdf
 
 
 #kong
@@ -40,7 +44,7 @@ es_url: "http://localhost:9200"
 kibana_user: admin
 kibana_password: admin
 www_kibana_port: 80
-nginx_server_domain: 3.228.22.155     #Kibana browser-reachable IP to be added to Nginx config that is before Kibana. Private internal IP might not work if it is not reachable from browser as it is NGINX server 'domain/ip'.
+nginx_server_domain: 3.219.219.253     #Kibana browser-reachable IP to be added to Nginx config that is before Kibana. Private internal IP might not work if it is not reachable from browser as it is NGINX server 'domain/ip'.
 #nginx_server_domain: "{{ groups['ELK'][0] }}"
 
 #Logstash Setting
@@ -50,6 +54,6 @@ nginx_server_domain: 3.228.22.155     #Kibana browser-reachable IP to be added t
 prometheus_port: 9091
 prometheus_config_folder: /tmp/prometheus
 #Grafana vars
-prometheus_ip: 3.228.22.155      #prometheus's browser-reachable IP for connection purposes from Grafana. Since Grafana is running as docker, ONLY browser-reachable IP works and not private server-internal IP.
+prometheus_ip: 3.219.219.253      #prometheus's browser-reachable IP for connection purposes from Grafana. Since Grafana is running as docker, ONLY browser-reachable IP works and not private server-internal IP.
 grafana_config_folder: /tmp/grafana
 grafana_port: 3000

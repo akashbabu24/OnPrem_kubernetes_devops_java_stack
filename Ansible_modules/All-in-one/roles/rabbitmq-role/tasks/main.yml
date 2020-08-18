@@ -45,3 +45,7 @@
   shell: "{{ cmd_path }} apply -f {{ application_manifests }}/creating-rbac.yml -f {{ application_manifests }}/pv.yml -f {{ application_manifests }}/pvc.yml -f {{ application_manifests }}/stateful-set.yml -f {{ application_manifests }}/service.yml"
   #with_items: ['creating-rbac.yml', 'pv.yml', 'pvc.yml', 'stateful-set.yml', 'service.yml']
   ignore_errors: true
+
+- pause:
+    prompt: "Please hold on while we deploy your RabbitMQ environment and bring it up before deploying applications"
+    seconds: 15

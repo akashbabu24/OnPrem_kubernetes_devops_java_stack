@@ -1,54 +1,48 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-   name: rabbitmq-pv0
-   labels:
-     name: rabbitmq
-     type: local
+   name: canary-kube-pv0
 spec:
-  storageClassName: local-storage
+  storageClassName: canary-manual
   persistentVolumeReclaimPolicy: Recycle
   accessModes:
     - ReadWriteMany
   capacity:
-    storage: 500Mi
-  hostPath:
-   path: "{{ nfs_client_share_dir }}"
+    storage: 1Gi
+  nfs:
+   server: {{ groups['nfs-server'][0] }}
+   path: /kubedata3
 
 ---
 
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-   name: rabbitmq-pv1
-   labels:
-     name: rabbitmq
-     type: local
+   name: canary-kube-pv1
 spec:
-  storageClassName: local-storage
+  storageClassName: canary-manual
   persistentVolumeReclaimPolicy: Recycle
   accessModes:
     - ReadWriteMany
   capacity:
-    storage: 500Mi
-  hostPath:
-   path: "{{ nfs_client_share_dir }}"
+    storage: 1Gi
+  nfs:
+   server: {{ groups['nfs-server'][0] }}
+   path: /kubedata3
 
 ---
 
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-   name: rabbitmq-pv2
-   labels:
-     name: rabbitmq
-     type: local
+   name: canary-kube-pv2
 spec:
-  storageClassName: local-storage
+  storageClassName: canary-manual
   persistentVolumeReclaimPolicy: Recycle
   accessModes:
     - ReadWriteMany
   capacity:
-    storage: 500Mi
-  hostPath:
-   path: "{{ nfs_client_share_dir }}"
+    storage: 1Gi
+  nfs:
+   server: {{ groups['nfs-server'][0] }}
+   path: /kubedata3

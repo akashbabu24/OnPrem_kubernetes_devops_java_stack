@@ -5,4 +5,4 @@
   roles:
        - postgres
   vars:
-     postgresql_allowed_cidr: "{{ gvars_postgres_nfs_allowed_from_cidr }}"
+     postgresql_allowed_cidr: "{{ gvars_postgres_allowed_from_cidr }}"

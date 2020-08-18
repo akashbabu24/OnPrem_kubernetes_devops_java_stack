@@ -20,12 +20,12 @@ rule_files:
 scrape_configs:
    #The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
      - job_name: 'camel-producer-metrics'
-       metrics_path: /producer/prometheus 
+       metrics_path: /actuator/prometheus 
        static_configs:
          - targets: [{{ groups['kube-workers'][0] }}:{{kong_port}}]
     
-     - job_name: 'camel-consumer-metrics'
-       metrics_path: /consumer/prometheus
-       static_configs:
-         - targets: [{{ groups['kube-workers'][0] }}:{{kong_port}}]
+#     - job_name: 'camel-consumer-metrics'
+ #      metrics_path: /actuator/prometheus
+  #     static_configs:
+   #      - targets: [{{ groups['kube-workers'][0] }}:{{kong_port}}]
 

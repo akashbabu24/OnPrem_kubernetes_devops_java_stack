@@ -13,13 +13,13 @@
             group: root
             mode: "0777"
             allow_from:
-             - "{{ gvars_postgres_nfs_allowed_from_cidr }}"
+             - "{{ gvars_nfs_allowed_from_cidr }}"
           - path: "{{ nfs_server_export_dir2 }}"
             owner: root
             group: root
             mode: "0777"
             allow_from:
-              - "{{ gvars_postgres_nfs_allowed_from_cidr }}"
+              - "{{ gvars_nfs_allowed_from_cidr }}"
 - hosts: nfs-client
   gather_facts: yes
   become: yes

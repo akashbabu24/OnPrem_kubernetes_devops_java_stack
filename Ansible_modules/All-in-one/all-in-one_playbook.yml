@@ -5,7 +5,9 @@
   vars:
     nodeip: var=ansible_eth0.ipv4.address
   roles:
-    - kubeadm-master-role
+    - role: kubeadm-master-role
+      vars_files:
+        - group_vars/all.yml
 
 - name: Configure Kube-adm worker
   hosts: kube-workers
@@ -36,13 +38,24 @@
             group: root
             mode: "0777"
             allow_from:
-             - "{{ gvars_postgres_nfs_allowed_from_cidr }}"
+             - "{{ gvars_nfs_allowed_from_cidr }}"
           - path: "{{ nfs_server_export_dir2 }}"
             owner: root
             group: root
             mode: "0777"
             allow_from:
-              - "{{ gvars_postgres_nfs_allowed_from_cidr }}"
+              - "{{ gvars_nfs_allowed_from_cidr }}"
+- hosts: nfs-client
+  gather_facts: yes
+  become: yes
+  roles:
+   - name: Install NFS client software & create the fstab entry.
+     role: nfs-role/client-nfs
+     vars:
+        nfs_client_remote_export: "{{ nfs_server_export_dir }}"
+        nfs_client_share_mount_point: "{{ nfs_client_share_dir }}"
+        nfs_host: "{{ hostvars[groups['nfs-server'][0]].ansible_eth0.ipv4.address }}"
+
 - hosts: nfs-client
   gather_facts: yes
   become: yes
@@ -51,8 +64,9 @@
      role: nfs-role/client-nfs
      vars:
         nfs_client_remote_export: "{{ nfs_server_export_dir2 }}"
-        nfs_client_share_mount_point: "{{ nfs_client_share_dir }}"
+        nfs_client_share_mount_point: "{{ nfs_client_share_dir2 }}"
         nfs_host: "{{ hostvars[groups['nfs-server'][0]].ansible_eth0.ipv4.address }}"
+
 
 - hosts: dbserver
   gather_facts: yes
@@ -60,7 +74,7 @@
   roles:
        - postgres
   vars:
-     postgresql_allowed_cidr: "{{ gvars_postgres_nfs_allowed_from_cidr }}"
+     postgresql_allowed_cidr: "{{ gvars_postgres_allowed_from_cidr }}"
 
 
 - name: Rabbitmq play

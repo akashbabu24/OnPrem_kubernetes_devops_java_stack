@@ -37,7 +37,7 @@
         - datasources.yml
         - dashboardproviders.yml
         - producer-metrics.json
-        - consumer-metrics.json
+        #- consumer-metrics.json
     - name: Grafana container creation
       docker_container:
         name: grafana
@@ -49,7 +49,7 @@
            - "{{ grafana_port }}:3000"
         volumes:
            - "{{ grafana_config_folder }}/producer-metrics.json:/var/lib/grafana/dashboards/camel-producer-metrics/producer-metrics.json" 
-           - "{{ grafana_config_folder }}/consumer-metrics.json:/var/lib/grafana/dashboards/camel-consumer-metrics/consumer-metrics.json"
+         #  - "{{ grafana_config_folder }}/consumer-metrics.json:/var/lib/grafana/dashboards/camel-consumer-metrics/consumer-metrics.json"
            - "{{ grafana_config_folder }}/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml"
            - "{{ grafana_config_folder }}/dashboardproviders.yml:/etc/grafana/provisioning/dashboards/dashboardproviders.yml"
     - name: Copying Service file to /etc/systemd/system path to run Grafana as a systemd service
@@ -65,9 +65,9 @@
         enabled: yes
         state: started
       ignore_errors: true
-    - name: Check if grafana is accessible
-      uri:
-         url: http://localhost:{{ grafana_port }}
-         method: GET
-         status_code: 200
-      ignore_errors: true
+    #- name: Check if grafana is accessible
+      #uri:
+         #url: http://localhost:{{ grafana_port }}
+        # method: GET
+       #  status_code: 302
+      #ignore_errors: true

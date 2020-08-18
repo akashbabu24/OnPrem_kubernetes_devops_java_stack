@@ -3,13 +3,15 @@ kind: PersistentVolumeClaim
 metadata:
   name: data-rabbitmq-0
   namespace: rabbitmq
+  labels:
+    app: rabbitmq
 spec:
-  storageClassName: canary-manual
+  storageClassName: local-storage
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-       storage: 1Gi
+       storage: 500Mi
 ---
 
 apiVersion: v1
@@ -17,13 +19,15 @@ kind: PersistentVolumeClaim
 metadata:
   name: data-rabbitmq-1
   namespace: rabbitmq
+  labels:
+    app: rabbitmq
 spec:
-  storageClassName: canary-manual
+  storageClassName: local-storage
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-       storage: 1Gi
+       storage: 500Mi
 ---
 
 apiVersion: v1
@@ -31,12 +35,12 @@ kind: PersistentVolumeClaim
 metadata:
   name: data-rabbitmq-2
   namespace: rabbitmq
+  labels:
+    app: rabbitmq
 spec:
-  storageClassName: canary-manual
+  storageClassName: local-storage
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-       storage: 1Gi
----
-
+       storage: 500Mi

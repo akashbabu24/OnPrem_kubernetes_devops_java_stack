@@ -1,10 +1,21 @@
 - name: Upgrade all packages
   yum: name=* state=latest
+
 - name: Install Docker
   package:
         name: docker
         state: latest
   become: yes
+
+- name: Copy daemon.json for docker insecure registries
+  template:
+        src: daemon.json.j2
+        dest: /etc/docker/daemon.json
+        owner: root
+        group: root
+        mode: '0544'
+  #when: if_insecure-registry
+
 - name: Start Docker service
   service:
         name: docker

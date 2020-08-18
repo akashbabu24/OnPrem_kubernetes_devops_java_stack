@@ -19,3 +19,10 @@ The following guides illustrate how to use some features concretely:
 * [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
 * [Building REST services with Spring](https://spring.io/guides/tutorials/bookmarks/)
 
+For building the application,
+1. Change dir to this directory
+2. Execute 'mvn package'
+3. docker login <registry_url:port>                   # If insecure registry, need to add an enrty in docker daemon.json (refer role kubeadm-master-role)
+4. docker build -t <registry tag> -f dockerfile .     # registry tag should have nexus private registry tag like 'docker build -t 3.1.5.157:8082/clconsumer'
+5. docker push <registry tag>
+

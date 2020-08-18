@@ -20,7 +20,6 @@
 - name: Create Kiali Secret
   shell: "echo \"{{ secret | to_yaml }}\" | {{cmd_path}} create -f - "
   when: secretexist.rc != 0
-  #when: '"not found" not in secretexist.stdout or "not found" not in secretexist.stderr'
 
 - name: To check if Istio_manifests folder exists
   stat:

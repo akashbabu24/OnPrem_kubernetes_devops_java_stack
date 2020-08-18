@@ -1,4 +1,4 @@
-- name: "Stage 1: install repository package"
+- name: "Stage 1: install Postgres repository package"
   yum: 
     state: present
     pkg: "{{ item.repo }}"

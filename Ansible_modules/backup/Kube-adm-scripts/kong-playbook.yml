@@ -1,9 +1,0 @@
----
-- hosts: kube-leader 
-  gather_facts: true
-  become: true
-  roles:
-   - name: kong
-     role: kong
-     vars:
-        kong_yml_file: "kong-extDB.yml"

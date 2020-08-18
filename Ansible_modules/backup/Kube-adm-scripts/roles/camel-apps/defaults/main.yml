@@ -1,3 +1,0 @@
-application_manifests: "$HOME/.kube/camel-application-manifests"
-application_yml_file: 
-cmd_path: "kubectl"

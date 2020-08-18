@@ -1,8 +1,0 @@
-- name: Configure Kube-adm worker
-  hosts: kube-masters
-  become: true
-  gather_facts: true
-  roles:
-    - rabbitmq-role
-  vars:
-        ns_name: "{{ gvars.ns_name }}"

@@ -7,10 +7,6 @@
     {{ cmd_path }} version | sed -En "{{'s/Server Version.*GitVersion.*v([[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+).*/\1/p'}}" | tail -1
   register: vo
 
-#- assert:
- #   that:
-  #    - "vo.stdout is version_compare(minimum_cluster_version,'>=')"
-   # msg: "Cluster version must be at least {{ minimum_cluster_version }}"
 
 - include_tasks: delete_resources.yml
   when: istio.delete_resources == true

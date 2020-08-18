@@ -1,3 +1,5 @@
+##ONLY if DB-less needed for testing purposes. not part of the current provisioning
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:

@@ -1,2 +1,0 @@
-application_manifests: "$HOME/.kube/rabbitmq-manifests"
-cmd_path: "kubectl"

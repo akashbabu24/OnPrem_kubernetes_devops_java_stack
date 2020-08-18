@@ -21,32 +21,21 @@
         name: docker
         enabled: yes
         state: started
-    - name: Get Kong IP
-      shell: echo $(sudo kubectl get svc | grep kong | awk '{print $4}')
-      register: kong_ip_addr
-      delegate_to: "{{ groups['kube-masters'][0] }}"
-    - name: Get Kong Port
+    
+    - name: Get Kong Port for pulling producer metrics
       shell: |
             echo $(sudo kubectl get svc | grep producer | awk '{print $5}' | awk -F"/" '{print $1}' | awk -F":" '{print $2}')
       register: kong_node_port
       delegate_to: "{{ groups['kube-masters'][0] }}"
 
     - set_fact:
-        kong_ip: "{{ kong_ip_addr.stdout }}"
-    - set_fact:
         kong_port: "{{ kong_node_port.stdout }}"
 
-    #- name: To check if prometheus host folder exists
-     # stat:
-      # path: "{{ prometheus_config_folder }}"
-      #register: prometheus_config_folder_exists
     - name: Create prometheus host config folder
       file:
             path: "{{ prometheus_config_folder }}"
             state: directory
             mode: 0777
-#            owner: 65534
- #           group: 65534
  
     - name: Copy prometheus config YAML file to the prometheus container
       template:
@@ -54,7 +43,6 @@
        dest: "{{ prometheus_config_folder }}/prometheus.yml"
        mode: 0777
       vars:
-        kong_ip: "{{ kong_ip }}"
         kong_port: "{{ kong_port }}"        
  
     - name: Prometheus container creation
@@ -71,6 +59,7 @@
            
         command:
            - '--config.file=/opt/prometheus/prometheus.yml'
+           # Uncomment below if needed
            #- '--storage.tsdb.path=/prometheus'
            #- '--web.console.libraries=/usr/share/prometheus/console_libraries'
            #- '--web.console.templates=/usr/share/prometheus/consoles'

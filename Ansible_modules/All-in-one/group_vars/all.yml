@@ -17,8 +17,8 @@ gvars_rabbitmq_namespace_name: "rabbitmq"
 
 #camel-apps variables
 
-producer_docker_image_tag: akash-clproducer-metric
-consumer_docker_image_tag: akash-clconsumer-metric
+producer_docker_image_tag: akash-clproducer-metric-v2
+consumer_docker_image_tag: akash-clconsumer-metric-v2
 #producer_docker_image_tag: akash-clproducer-9d
 #consumer_docker_image_tag: akash-clconsumer-17dnewdf
 

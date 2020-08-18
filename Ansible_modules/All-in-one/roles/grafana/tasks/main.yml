@@ -26,7 +26,6 @@
       file:
         path: "{{ grafana_config_folder }}"
         state: directory
-        #mode: 0777
 
     - name: Copy grafana config YAML file to the prometheus container
       template:
@@ -37,7 +36,7 @@
         - datasources.yml
         - dashboardproviders.yml
         - producer-metrics.json
-        #- consumer-metrics.json
+        #- consumer-metrics.json             #Uncomment when consumer metrics exposed and needs to be exported
     - name: Grafana container creation
       docker_container:
         name: grafana
@@ -49,7 +48,7 @@
            - "{{ grafana_port }}:3000"
         volumes:
            - "{{ grafana_config_folder }}/producer-metrics.json:/var/lib/grafana/dashboards/camel-producer-metrics/producer-metrics.json" 
-         #  - "{{ grafana_config_folder }}/consumer-metrics.json:/var/lib/grafana/dashboards/camel-consumer-metrics/consumer-metrics.json"
+         #  - "{{ grafana_config_folder }}/consumer-metrics.json:/var/lib/grafana/dashboards/camel-consumer-metrics/consumer-metrics.json"      #Uncomment when consumer metrics exposed and needs to be exported
            - "{{ grafana_config_folder }}/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml"
            - "{{ grafana_config_folder }}/dashboardproviders.yml:/etc/grafana/provisioning/dashboards/dashboardproviders.yml"
     - name: Copying Service file to /etc/systemd/system path to run Grafana as a systemd service
@@ -58,16 +57,9 @@
         dest: /etc/systemd/system
         remote_src: no
         owner: root
-        #mode: 0777
     - name: Enable grafana systemd service and ensure it is running
       service:
         name: grafana.service
         enabled: yes
         state: started
       ignore_errors: true
-    #- name: Check if grafana is accessible
-      #uri:
-         #url: http://localhost:{{ grafana_port }}
-        # method: GET
-       #  status_code: 302
-      #ignore_errors: true

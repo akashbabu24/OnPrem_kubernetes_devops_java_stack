@@ -1,3 +1,0 @@
-- include_tasks: kubernetes_master_prerequisites.yml
-
-- include_tasks: leader_master.yml

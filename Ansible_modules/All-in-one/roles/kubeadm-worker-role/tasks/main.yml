@@ -26,8 +26,8 @@
   when:
     - not kubeadm_join_already_run.stat.exists
 
-- pause:
-    #prompt: "Wait for containers to Pull and install"
+- name: Please hold on while we join the workers with kube master
+  pause:
     seconds: 5
   when:
     - not kubeadm_join_already_run.stat.exists

@@ -19,13 +19,15 @@
       vars_files:
         - group_vars/all.yml
 
-- hosts: kube-masters
+- name: Istio play
+  hosts: kube-masters
   gather_facts: true
   become: true
   roles:
     - istio
 
-- hosts: nfs-server
+- name: NFSserver play
+  hosts: nfs-server
   gather_facts: yes
   become: yes
   roles:
@@ -45,7 +47,8 @@
             mode: "0777"
             allow_from:
               - "{{ gvars_nfs_allowed_from_cidr }}"
-- hosts: nfs-client
+- name: NFSclient play
+  hosts: nfs-client
   gather_facts: yes
   become: yes
   roles:
@@ -56,7 +59,8 @@
         nfs_client_share_mount_point: "{{ nfs_client_share_dir }}"
         nfs_host: "{{ hostvars[groups['nfs-server'][0]].ansible_eth0.ipv4.address }}"
 
-- hosts: nfs-client
+- name: NFSclient play2
+  hosts: nfs-client
   gather_facts: yes
   become: yes
   roles:
@@ -68,7 +72,8 @@
         nfs_host: "{{ hostvars[groups['nfs-server'][0]].ansible_eth0.ipv4.address }}"
 
 
-- hosts: dbserver
+- name: External Postgres play
+  hosts: dbserver
   gather_facts: yes
   become: yes
   roles:
@@ -88,7 +93,8 @@
   vars: 
         ns_name: "{{ gvars_rabbitmq_namespace_name }}"
 
-- hosts: kube-masters
+- name:  Producer App Play 
+  hosts: kube-masters
   gather_facts: true
   become: true
   roles:
@@ -100,7 +106,8 @@
         application_yml_file: "deployment-producer.yml"
 
 
-- hosts: kube-masters
+- name: Consumer App Play
+  hosts: kube-masters
   gather_facts: true
   become: true
   roles:
@@ -110,10 +117,11 @@
         - group_vars/all.yml
      vars:
         application_yml_file: "deployment-consumer.yml"
-        postgres_ip: "{{ hostvars[groups['dbserver'][0]].ansible_eth0.ipv4.address }}"
+        postgres_ip: "{{ groups['dbserver'][0] }}"
 
 
-- hosts: kube-masters
+- name: Kong Play
+  hosts: kube-masters
   gather_facts: true
   become: true
   roles:
@@ -122,7 +130,8 @@
      vars_files:
         - group_vars/all.yml
 
-- hosts: kube-masters
+- name: MetalLB play
+  hosts: kube-masters
   gather_facts: true
   become: true
   roles:
@@ -132,7 +141,8 @@
         metallb_ip_range: "{{ metallb_ip_range_list }}"
 
 
-- hosts: monitoring
+- name: Prometheus Play
+  hosts: monitoring
   gather_facts: true
   become: true
   roles:
@@ -141,7 +151,8 @@
      vars_files:
         - group_vars/all.yml
 
-- hosts: monitoring
+- name: Grafana Play
+  hosts: monitoring
   gather_facts: true
   become: true
   roles:
@@ -151,7 +162,8 @@
        - group_vars/all.yml
 
 #ELK playbook
-- hosts: ELK
+- name: Pre-check for ELK plays
+  hosts: ELK
   gather_facts: yes
   become: yes
   remote_user: centos
@@ -182,7 +194,8 @@
         state=present
 
 
-- hosts: ELK
+- name: Elastic Play 
+  hosts: ELK
   become: yes
   remote_user: centos
   vars_files:
@@ -190,7 +203,8 @@
   roles:
     - elastic
 
-- hosts: ELK
+- name: Kibana play
+  hosts: ELK
   become: yes
   remote_user: centos
   vars_files:
@@ -198,7 +212,8 @@
   roles:
     - kibana
 
-- hosts: ELK
+- name: Logstash play
+  hosts: ELK
   become: yes
   remote_user: centos
   vars_files:

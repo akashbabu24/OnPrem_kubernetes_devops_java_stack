@@ -1,4 +1,0 @@
-nfs_server_export_dir: /kube-data
-nfs_client_share_dir: /mnt/kube-data
-allowed_from_cidr: 172.31.0.0/20
-nfs_server_ip: 172.31.3.11

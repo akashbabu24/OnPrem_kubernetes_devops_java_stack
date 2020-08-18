@@ -31,12 +31,12 @@
     - server.key
     - root.crt 
 
-- name: "Stage 3: Enabling the Service"
+- name: "Stage 3: Enabling the Postgres Service"
   systemd:
     name: postgresql-{{ postgresql_version |replace('.', '') }}
     enabled: yes
 
-- name: "Stage 3: Starting the Service"
+- name: "Stage 3: Starting the Postgres Service"
   systemd:
     name: postgresql-{{ postgresql_version |replace('.', '') }}
     state: restarted

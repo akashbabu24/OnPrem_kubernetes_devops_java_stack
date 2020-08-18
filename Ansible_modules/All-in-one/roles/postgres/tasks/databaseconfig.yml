@@ -12,6 +12,6 @@
   become_user: postgres
   register: sql_response_file
 
-- name: debug response
+- name: SQL exec debug response
   debug:
     var: sql_response_file

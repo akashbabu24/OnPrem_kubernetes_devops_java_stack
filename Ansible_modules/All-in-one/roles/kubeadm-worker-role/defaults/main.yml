@@ -1,0 +1,2 @@
+nexus-docker-registry-url: 3.1.5.157:8082
+if_insecure-registry: true

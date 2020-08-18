@@ -33,3 +33,4 @@
     opts: "{{ nfs_client_mount_opts }}"
     state: mounted
   when: nfs_client_create_fstab_entry == true
+

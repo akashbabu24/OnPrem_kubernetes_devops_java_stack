@@ -35,6 +35,9 @@ spec:
           - name: amqp
             protocol: TCP
             containerPort: 5672
+        volumeMounts:
+         - mountPath: /var/lib/rabbitmq
+           name: data
         livenessProbe:
           exec:
             command: ["rabbitmqctl", "status"]
@@ -77,4 +80,4 @@ spec:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 3Gi
+            storage: 500Mi

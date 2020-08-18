@@ -1,7 +1,7 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: postgres-pv-volume
+  name: kong-postgres-volume
   labels:
     type: local
     app: postgres
@@ -9,8 +9,8 @@ spec:
   storageClassName: local-storage
   persistentVolumeReclaimPolicy: Recycle
   capacity:
-    storage: 5Gi
+    storage: 1Gi
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: "/mnt/data"
+    path: {{ nfs_client_share_dir2 }}

@@ -1,11 +1,13 @@
 FROM arrun003/centos7java8:v1
 
-LABEL maintainer "Arun Baskaran"
+LABEL maintainer "IClust Technologies"
 
-COPY target/camel-consumer-0.0.1-SNAPSHOT.jar /opt/
+RUN mkdir -p /app
 
-WORKDIR /opt/
+COPY target/camel-consumer-0.0.1-SNAPSHOT.jar /app
 
-#EXPOSE 8085
+WORKDIR /app
+
+EXPOSE 8086
 
 ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "camel-consumer-0.0.1-SNAPSHOT.jar"]

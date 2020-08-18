@@ -25,6 +25,9 @@
 - set_fact:
         kong_ip: "{{ groups['kube-workers'][0] }}"
 
+- pause:
+    prompt: "Please hold on while we deploy your Kong environment"
+    seconds: 75
 - name: Create kong certificate on kong db for our applications
   shell: curl --location --request POST "http://{{ kong_ip|quote }}:{{ kong_port|quote }}/certificates" --form 'cert=@{{ kong_manifests|quote }}/kong_app_ca.crt' --form 'cert=@{{ kong_manifests|quote }}/kong_app_cert.crt' --form 'key=@{{ kong_manifests|quote }}/private.key' --form 'snis=ec2-54-83-152-144.compute-1.amazonaws.com' | jq .id
   register: kong_app_cert_id
@@ -42,5 +45,13 @@
   run_once: true
 
 - name: add route for the producer actuator
-  shell: curl --location --request POST 'http://{{ kong_ip|quote }}:{{ kong_port|quote }}/services/producer-prometheus/routes' --form 'protocols=https' --form 'paths=/actuator/prometheus' --form 'name=producer-prometheus-route' --form 'snis=ec2-54-83-152-144.compute-1.amazonaws.com'
+  shell: curl --location --request POST 'http://{{ kong_ip|quote }}:{{ kong_port|quote }}/services/producer-prometheus/routes' --form 'protocols=https' --form 'paths=/producer/prometheus' --form 'name=producer-prometheus-route' --form 'snis=ec2-54-83-152-144.compute-1.amazonaws.com'
+  run_once: true
+
+- name: add service for producer actuator
+  shell: curl --location --request POST 'http://{{ kong_ip|quote }}:{{ kong_port|quote }}/services' --form 'url=http://camel-producer.default.svc.cluster.local:8085/producer/api/v1/upload/csv' --form 'name=producer-upload'
+  run_once: true
+
+- name: add route for the producer actuator
+  shell: curl --location --request POST 'http://{{ kong_ip|quote }}:{{ kong_port|quote }}/services/producer-prometheus/routes' --form 'protocols=https' --form 'paths=/producer/api/v1/upload/csv' --form 'name=producer-upload-route' --form 'snis=ec2-54-83-152-144.compute-1.amazonaws.com'
   run_once: true

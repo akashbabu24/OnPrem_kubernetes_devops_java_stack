@@ -42,9 +42,9 @@ spec:
       namespace: default
     spec:
       imagePullSecrets:
-      - name: ascenthr
+      - name: dockerregistrysecret
       containers:
-      - image: 3.1.5.157:8082/clproducer
+      - image: {{ nexus_docker_registry_url }}/{{ producer_docker_image_tag }}
         imagePullPolicy: Always
         name: camel-producer-container
         env:

@@ -11,9 +11,26 @@
           - path: "{{ nfs_server_export_dir }}"
             owner: root
             group: root
-            mode: "0775"
+            mode: "0777"
+            allow_from:
+             - "{{ gvars_postgres_nfs_allowed_from_cidr }}"
+          - path: "{{ nfs_server_export_dir2 }}"
+            owner: root
+            group: root
+            mode: "0777"
             allow_from:
               - "{{ gvars_postgres_nfs_allowed_from_cidr }}"
+- hosts: nfs-client
+  gather_facts: yes
+  become: yes
+  roles:
+   - name: Install NFS client software & create the fstab entry.
+     role: nfs-role/client-nfs
+     vars:
+        nfs_client_remote_export: "{{ nfs_server_export_dir2 }}"
+        nfs_client_share_mount_point: "{{ nfs_client_share_dir2 }}"
+        nfs_host: "{{ hostvars[groups['nfs-server'][0]].ansible_eth0.ipv4.address }}"
+
 - hosts: nfs-client
   gather_facts: yes
   become: yes

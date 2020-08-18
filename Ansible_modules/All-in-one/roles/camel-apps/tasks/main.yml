@@ -16,7 +16,11 @@
     owner: root
     group: root
     mode: 0755
-  
+
+- name: Create docker registry secret
+  shell: "{{ cmd_path }} create secret docker-registry dockerregistrysecret --docker-server={{ nexus_docker_registry_url }} --docker-username={{ nexus_docker_registry_user }} --docker-password={{ nexus_docker_registry_pwd }} --docker-email={{ nexus_docker_registry_email }}"
+  ignore_errors: true
+
 - name: Deploy Application from kubernetes file
   shell: "{{ cmd_path }} apply -f {{ application_manifests }}/{{ application_yml_file }}"
   ignore_errors: true

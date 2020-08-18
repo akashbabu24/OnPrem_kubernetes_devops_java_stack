@@ -1,3 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: camel-consumer
+  namespace: default
+spec:
+  sessionAffinity: None
+  type: NodePort
+  ports:
+  - name: camel-consumer-port
+    port: 8086
+    protocol: TCP
+    targetPort: camel-consumer
+  selector:
+    app: back-end
+    type: camel-consumer-jar
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -23,9 +42,9 @@ spec:
       namespace: default
     spec:
       imagePullSecrets:
-      - name: ascenthr
+      - name: dockerregistrysecret
       containers:
-      - image: 3.1.5.157:8082/clconsumer
+      - image: {{ nexus_docker_registry_url }}/{{ consumer_docker_image_tag }}
         imagePullPolicy: Always
         name: camel-consumer-container
         env:

@@ -1,6 +1,6 @@
 FROM arrun003/centos7java8:v1
 
-LABEL maintainer "Arun Baskaran"
+LABEL maintainer "IClust Technologies"
 
 RUN mkdir -p /app
 

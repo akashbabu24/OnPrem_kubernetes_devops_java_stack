@@ -9,5 +9,5 @@
 # /srv/nfs4/homes  gss/krb5i(rw,sync,no_subtree_check)
 #
 {% for share_entry in nfs_exports %}
-{{ share_entry.path }}{% for allowed_host in share_entry.allow_from %} {{ allowed_host }}({{ nfs_export_options }}){% endfor %}
+{{ share_entry.path }}{% for allowed_host in share_entry.allow_from %} {{ allowed_host }}({{ nfs_export_options }}){% endfor %}  
 {% endfor %}

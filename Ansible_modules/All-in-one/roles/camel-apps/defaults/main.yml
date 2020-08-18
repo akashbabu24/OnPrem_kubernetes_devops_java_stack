@@ -2,3 +2,8 @@ application_manifests: "$HOME/.kube/camel-application-manifests"
 application_yml_file: 
 cmd_path: "kubectl"
 postgres_ip:
+producer-docker-image-tag:
+consumer-docker-image-tag:
+nexus-docker-registry-user:
+nexus-docker-registry-pwd:
+nexus-docker-registry-email:

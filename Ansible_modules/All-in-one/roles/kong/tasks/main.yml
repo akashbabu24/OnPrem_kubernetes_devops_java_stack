@@ -21,8 +21,14 @@
    - kong-database.yml
 
 - name: Deploy Kong from kubernetes files
-  shell: "{{ cmd_path }} apply -f {{ kong_manifests }}/kong-namespace.yml -f {{ kong_manifests }}/pv_postgres.yml -f {{ kong_manifests }}/pvc_postgres.yml -f {{ kong_manifests }}/kong-database.yml"
+  shell: "{{ cmd_path }} apply -f {{ kong_manifests }}/kong-namespace.yml"
   ignore_errors: true
 
+- name: Create label for kong with istio-injection enabled
+  shell: "kubectl label namespace kong istio-injection=enabled"
+  ignore_errors: true
+- name: Deploy Kong from kubernetes files
+  shell: "{{ cmd_path }} apply -f {{ kong_manifests }}/pv_postgres.yml -f {{ kong_manifests }}/pvc_postgres.yml -f {{ kong_manifests }}/kong-database.yml"
+  ignore_errors: true
 
 - include_tasks: configure_kong_ingress.yml

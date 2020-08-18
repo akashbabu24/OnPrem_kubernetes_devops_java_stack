@@ -1,8 +1,10 @@
-- name: Configure Kube-adm worker
+- name: Rabbitmq play
   hosts: kube-masters
   become: true
   gather_facts: true
   roles:
     - rabbitmq-role
+  vars_files:
+        - group_vars/all.yml
   vars:
         ns_name: "{{ gvars_rabbitmq_namespace_name }}"

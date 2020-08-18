@@ -12,7 +12,10 @@
   become: true
   gather_facts: true
   roles:
-    - kubeadm-worker-role
+    - name: kubeadm-worker-role 
+      role: kubeadm-worker-role
+      vars_files:
+        - group_vars/all.yml
 
 - hosts: kube-masters
   gather_facts: true
@@ -31,7 +34,13 @@
           - path: "{{ nfs_server_export_dir }}"
             owner: root
             group: root
-            mode: "0775"
+            mode: "0777"
+            allow_from:
+             - "{{ gvars_postgres_nfs_allowed_from_cidr }}"
+          - path: "{{ nfs_server_export_dir2 }}"
+            owner: root
+            group: root
+            mode: "0777"
             allow_from:
               - "{{ gvars_postgres_nfs_allowed_from_cidr }}"
 - hosts: nfs-client
@@ -41,11 +50,9 @@
    - name: Install NFS client software & create the fstab entry.
      role: nfs-role/client-nfs
      vars:
-        nfs_client_remote_export: "{{ nfs_server_export_dir }}"
+        nfs_client_remote_export: "{{ nfs_server_export_dir2 }}"
         nfs_client_share_mount_point: "{{ nfs_client_share_dir }}"
         nfs_host: "{{ hostvars[groups['nfs-server'][0]].ansible_eth0.ipv4.address }}"
-
-
 
 - hosts: dbserver
   gather_facts: yes
@@ -56,12 +63,14 @@
      postgresql_allowed_cidr: "{{ gvars_postgres_nfs_allowed_from_cidr }}"
 
 
-- name: Configure Kube-adm worker
+- name: Rabbitmq play
   hosts: kube-masters
   become: true
   gather_facts: true
   roles:
     - rabbitmq-role
+  vars_files:
+        - group_vars/all.yml
   vars: 
         ns_name: "{{ gvars_rabbitmq_namespace_name }}"
 
@@ -71,6 +80,8 @@
   roles:
    - name: producer-app
      role: camel-apps
+     vars_files:
+        - group_vars/all.yml
      vars:
         application_yml_file: "deployment-producer.yml"
 
@@ -81,19 +92,21 @@
   roles:
    - name: consumer-app
      role: camel-apps
+     vars_files:
+        - group_vars/all.yml
      vars:
         application_yml_file: "deployment-consumer.yml"
         postgres_ip: "{{ hostvars[groups['dbserver'][0]].ansible_eth0.ipv4.address }}"
 
 
-#- hosts: kube-masters
- # gather_facts: true
- # become: true
-  #roles:
-   #- name: kong
-    # role: kong
-     #vars:
-      #  kong_yml_file: "kong-dbless-istio.yml"
+- hosts: kube-masters
+  gather_facts: true
+  become: true
+  roles:
+   - name: kong
+     role: kong
+     vars_files:
+        - group_vars/all.yml
 
 - hosts: kube-masters
   gather_facts: true

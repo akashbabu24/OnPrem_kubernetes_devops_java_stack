@@ -1,0 +1,21 @@
+---
+
+- name: Configure MongoDB yum repo
+  yum_repository:
+    name: mongodb-org-4.4
+    description: MongoDB YUM repo
+    file: elasticsearch
+    baseurl: "{{ mongo_repo_base_url }}"
+    gpgkey:  "{{ mongo_repo_gpgkey }}"
+    gpgcheck: 1
+    enabled: yes 
+
+- name: Install MongoDB
+  yum:
+    name: mongodb-org
+    state: present
+  notify:
+    - restart mongod
+
+- include: users.yml
+- include: configure.yml

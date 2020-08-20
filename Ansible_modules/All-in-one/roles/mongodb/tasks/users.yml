@@ -1,0 +1,12 @@
+---
+
+- name: add the admin user
+  mongodb_user: 
+    database: "admin" 
+    name: "{{ mongo_user }}" 
+    password: "{{ mongo_password }}" 
+    roles: readWriteAnyDatabase
+    state: present
+  ignore_errors: yes
+  notify:
+    - restart mongod

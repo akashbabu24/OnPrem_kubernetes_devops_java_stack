@@ -7,6 +7,7 @@
     password: "{{ mongo_password }}" 
     roles: readWriteAnyDatabase
     state: present
+  no_log: true
   ignore_errors: yes
   notify:
     - restart mongod

@@ -14,8 +14,16 @@
   yum:
     name: mongodb-org
     state: present
-  notify:
-    - restart mongod
+
+- name: "Enabling the MongoDB Service"
+  systemd:
+    name: mongod
+    enabled: yes
+
+- name: "Starting the MongoDB Service"
+  systemd:
+    name: mongod
+    state: started
 
 - include: users.yml
 - include: configure.yml

@@ -57,3 +57,13 @@ prometheus_config_folder: /tmp/prometheus
 prometheus_ip: 3.219.219.253      #prometheus's browser-reachable IP for connection purposes from Grafana. Since Grafana is running as docker, ONLY browser-reachable IP works and not private server-internal IP.
 grafana_config_folder: /tmp/grafana
 grafana_port: 3000
+
+
+#MongoDB
+mongo_repo_base_url: https://repo.mongodb.org/yum/redhat/7Server/mongodb-org/4.4/x86_64/
+mongo_repo_gpgkey: https://www.mongodb.org/static/pgp/server-4.4.asc
+
+mongo_port: 27017
+mongo_bind_ip: 0.0.0.0
+mongo_user: admin
+mongo_password: H5hP7YrO6q9c

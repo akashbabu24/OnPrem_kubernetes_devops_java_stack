@@ -221,3 +221,57 @@
   roles:
     - logstash
 
+
+#MongoDB playbook
+- name: Pre-check for MongoDB plays
+  hosts: MongoDB
+  gather_facts: yes
+  become: yes
+  remote_user: centos
+  vars_files:
+    - group_vars/all.yml
+
+# Pre task Evalutavet the host machine is Redhat Family or Support YUM Package manager
+  pre_tasks:
+    - name: Check OS support
+      fail:
+        msg: The following OS family {{ ansible_os_family }} {{ ansible_architecture }} is not supported
+      when: not ansible_os_family == "RedHat" or not ansible_architecture == "x86_64"
+
+    - name: Check package manager support
+      fail:
+        msg: The following package manager {{ ansible_pkg_mgr }} is not supported
+      when: not ansible_pkg_mgr == "yum"
+
+# Install Java in the remote as java requried for all
+  tasks:
+    - name: Install openjdk
+      yum:
+        name: java-1.8.0-openjdk-headless
+        state: present
+
+    - name: Check/Install EPEL Repo
+      yum: name={{epel_repo}}
+        state=present
+
+# Python and pip is requried to manage the mongodb using pymongo
+#REF https://docs.ansible.com/ansible/latest/modules/mongodb_user_module.html
+      
+    - name: Install python and pip 
+      yum:
+        name: [python, python-pip]
+        state: present
+  
+    - name: pip install 
+      pip:
+        name : pymongo==3.11.0
+
+
+- name: MongoDB play
+  hosts: MongoDB
+  become: yes
+  remote_user: centos
+  vars_files:
+    - group_vars/all.yml
+  roles:
+    - mongodb
